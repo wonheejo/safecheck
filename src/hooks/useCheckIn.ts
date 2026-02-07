@@ -33,7 +33,7 @@ export function useCheckIn({userId, autoCheckInOnAppOpen = true}: UseCheckInOpti
           return null;
         }
 
-        setLastCheckIn(data);
+        setLastCheckIn(data ?? null);
         return data;
       } catch (err) {
         const message = err instanceof Error ? err.message : 'Failed to check in';

@@ -70,30 +70,43 @@ export const ConsentScreen: React.FC<ConsentScreenProps> = ({navigation}) => {
             </View>
           </View>
 
-          <TouchableOpacity
-            style={styles.checkboxRow}
-            onPress={() => setAcceptedTerms(!acceptedTerms)}>
-            <View style={[styles.checkbox, acceptedTerms && styles.checkboxChecked]}>
-              {acceptedTerms && <Text style={styles.checkmark}>v</Text>}
-            </View>
+          <View style={styles.checkboxRow}>
+            <TouchableOpacity
+              onPress={() => setAcceptedTerms(!acceptedTerms)}
+              style={styles.checkboxTouchable}>
+              <View style={[styles.checkbox, acceptedTerms && styles.checkboxChecked]}>
+                {acceptedTerms && <Text style={styles.checkmark}>v</Text>}
+              </View>
+            </TouchableOpacity>
             <Text style={styles.checkboxLabel}>
               I agree to the{' '}
-              <Text style={styles.link}>Terms of Service</Text>
+              <Text
+                style={styles.link}
+                onPress={() => navigation.navigate('TermsOfService')}>
+                Terms of Service
+              </Text>
             </Text>
-          </TouchableOpacity>
+          </View>
 
-          <TouchableOpacity
-            style={styles.checkboxRow}
-            onPress={() => setAcceptedPrivacy(!acceptedPrivacy)}>
-            <View style={[styles.checkbox, acceptedPrivacy && styles.checkboxChecked]}>
-              {acceptedPrivacy && <Text style={styles.checkmark}>v</Text>}
-            </View>
+          <View style={styles.checkboxRow}>
+            <TouchableOpacity
+              onPress={() => setAcceptedPrivacy(!acceptedPrivacy)}
+              style={styles.checkboxTouchable}>
+              <View style={[styles.checkbox, acceptedPrivacy && styles.checkboxChecked]}>
+                {acceptedPrivacy && <Text style={styles.checkmark}>v</Text>}
+              </View>
+            </TouchableOpacity>
             <Text style={styles.checkboxLabel}>
               I agree to the{' '}
-              <Text style={styles.link}>Privacy Policy</Text> and consent to
-              SafeCheck sending SMS messages to my trusted contacts on my behalf
+              <Text
+                style={styles.link}
+                onPress={() => navigation.navigate('PrivacyPolicy')}>
+                Privacy Policy
+              </Text>
+              {' '}and consent to SafeCheck sending SMS messages to my trusted
+              contacts on my behalf
             </Text>
-          </TouchableOpacity>
+          </View>
         </View>
 
         <View style={styles.footer}>
@@ -177,6 +190,10 @@ const styles = StyleSheet.create({
     gap: 12,
     paddingVertical: 8,
   },
+  checkboxTouchable: {
+    paddingRight: 4,
+    paddingTop: 2,
+  },
   checkbox: {
     width: 24,
     height: 24,
@@ -185,7 +202,6 @@ const styles = StyleSheet.create({
     borderColor: '#D1D5DB',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 2,
   },
   checkboxChecked: {
     backgroundColor: '#3B82F6',

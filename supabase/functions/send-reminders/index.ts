@@ -56,43 +56,91 @@ function isWithinSleepHours(
   }
 }
 
-// Send push notification via FCM
-async function sendPushNotification(fcmToken: string, title: string, body: string, data?: Record<string, string>) {
-  const fcmServerKey = Deno.env.get('FCM_SERVER_KEY');
-  if (!fcmServerKey) {
-    console.error('FCM_SERVER_KEY not configured');
-    return false;
+// FCM v1 API helpers
+function base64url(data: Uint8Array): string {
+  return btoa(String.fromCharCode(...data))
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=+$/, '');
+}
+
+async function getAccessToken(): Promise<string | null> {
+  const serviceAccountJson = Deno.env.get('FCM_SERVICE_ACCOUNT_JSON');
+  if (!serviceAccountJson) {
+    console.error('FCM_SERVICE_ACCOUNT_JSON not configured');
+    return null;
   }
 
   try {
-    const response = await fetch('https://fcm.googleapis.com/fcm/send', {
+    const sa = JSON.parse(serviceAccountJson);
+    const now = Math.floor(Date.now() / 1000);
+
+    const header = base64url(new TextEncoder().encode(JSON.stringify({ alg: 'RS256', typ: 'JWT' })));
+    const payload = base64url(new TextEncoder().encode(JSON.stringify({
+      iss: sa.client_email,
+      scope: 'https://www.googleapis.com/auth/firebase.messaging',
+      aud: sa.token_uri,
+      iat: now,
+      exp: now + 3600,
+    })));
+
+    const pemBody = sa.private_key.replace(/-----BEGIN PRIVATE KEY-----/, '').replace(/-----END PRIVATE KEY-----/, '').replace(/\n/g, '');
+    const keyData = Uint8Array.from(atob(pemBody), (c) => c.charCodeAt(0));
+    const cryptoKey = await crypto.subtle.importKey('pkcs8', keyData, { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' }, false, ['sign']);
+    const signature = new Uint8Array(await crypto.subtle.sign('RSASSA-PKCS1-v1_5', cryptoKey, new TextEncoder().encode(`${header}.${payload}`)));
+    const jwt = `${header}.${payload}.${base64url(signature)}`;
+
+    const tokenResponse = await fetch(sa.token_uri, {
       method: 'POST',
-      headers: {
-        'Authorization': `key=${fcmServerKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        to: fcmToken,
-        notification: { title, body },
-        data: data || {},
-        android: {
-          priority: 'normal',
-          notification: {
-            sound: 'default',
-          },
-        },
-        apns: {
-          payload: {
-            aps: {
-              sound: 'default',
-            },
-          },
-        },
-      }),
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: `grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=${jwt}`,
     });
 
+    const tokenData = await tokenResponse.json();
+    return tokenData.access_token;
+  } catch (error) {
+    console.error('Failed to get access token:', error);
+    return null;
+  }
+}
+
+// Send push notification via FCM v1 API
+async function sendPushNotification(fcmToken: string, title: string, body: string, data?: Record<string, string>) {
+  const accessToken = await getAccessToken();
+  if (!accessToken) return false;
+
+  const projectId = JSON.parse(Deno.env.get('FCM_SERVICE_ACCOUNT_JSON')!).project_id;
+
+  try {
+    const response = await fetch(
+      `https://fcm.googleapis.com/v1/projects/${projectId}/messages:send`,
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: {
+            token: fcmToken,
+            notification: { title, body },
+            data: data || {},
+            android: {
+              priority: 'NORMAL',
+              notification: { sound: 'default' },
+            },
+            apns: {
+              payload: {
+                aps: { sound: 'default' },
+              },
+            },
+          },
+        }),
+      }
+    );
+
     if (!response.ok) {
-      console.error('FCM send failed:', await response.text());
+      console.error('FCM v1 send failed:', await response.text());
       return false;
     }
 

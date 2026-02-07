@@ -4,8 +4,10 @@ import {
   supabase,
   signUpWithEmail,
   signInWithEmail,
+  signInWithGoogle as authSignInWithGoogle,
   signOut as authSignOut,
   getUserProfile,
+  resetPassword as authResetPassword,
 } from '../api/supabase';
 import type {User} from '../types';
 
@@ -72,14 +74,38 @@ export function useAuth() {
   const signUp = useCallback(async (email: string, password: string, fullName: string) => {
     setState(prev => ({...prev, loading: true}));
     const result = await signUpWithEmail(email, password, fullName);
-    setState(prev => ({...prev, loading: false}));
+    // Don't set loading: false here — onAuthStateChange will handle it after profile is fetched
+    if (result.error) {
+      setState(prev => ({...prev, loading: false}));
+    }
     return result;
   }, []);
 
   const signIn = useCallback(async (email: string, password: string) => {
     setState(prev => ({...prev, loading: true}));
     const result = await signInWithEmail(email, password);
-    setState(prev => ({...prev, loading: false}));
+    if (result.error) {
+      setState(prev => ({...prev, loading: false}));
+    }
+    return result;
+  }, []);
+
+  const signInWithGoogle = useCallback(async () => {
+    setState(prev => ({...prev, loading: true}));
+    try {
+      const result = await authSignInWithGoogle();
+      if (result.error) {
+        setState(prev => ({...prev, loading: false}));
+      }
+      return result;
+    } catch (error: any) {
+      setState(prev => ({...prev, loading: false}));
+      return {data: null, error: {message: error.message}};
+    }
+  }, []);
+
+  const resetPassword = useCallback(async (email: string) => {
+    const result = await authResetPassword(email);
     return result;
   }, []);
 
@@ -107,7 +133,9 @@ export function useAuth() {
     ...state,
     signUp,
     signIn,
+    signInWithGoogle,
     signOut,
+    resetPassword,
     refreshProfile,
     isAuthenticated: !!state.session,
   };

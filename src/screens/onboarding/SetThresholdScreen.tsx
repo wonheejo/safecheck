@@ -22,11 +22,17 @@ type SetThresholdScreenProps = {
 export const SetThresholdScreen: React.FC<SetThresholdScreenProps> = ({
   navigation,
 }) => {
-  const {authUser, refreshProfile} = useAuth();
+  const {authUser, userProfile, refreshProfile} = useAuth();
 
-  const [inactivityThreshold, setInactivityThreshold] = useState(24);
-  const [gracePeriod, setGracePeriod] = useState(2);
-  const [reminderFrequency, setReminderFrequency] = useState(4);
+  const [inactivityThreshold, setInactivityThreshold] = useState(
+    userProfile?.inactivity_threshold_hours ?? 24,
+  );
+  const [gracePeriod, setGracePeriod] = useState(
+    userProfile?.grace_period_hours ?? 2,
+  );
+  const [reminderFrequency, setReminderFrequency] = useState(
+    userProfile?.reminder_frequency_hours ?? 4,
+  );
   const [saving, setSaving] = useState(false);
 
   const handleContinue = async () => {

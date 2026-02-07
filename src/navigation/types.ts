@@ -3,6 +3,8 @@ export type AuthStackParamList = {
   SignUp: undefined;
   SignIn: undefined;
   Consent: undefined;
+  TermsOfService: undefined;
+  PrivacyPolicy: undefined;
 };
 
 export type OnboardingStackParamList = {

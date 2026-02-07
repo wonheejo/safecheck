@@ -22,7 +22,35 @@ type SignInScreenProps = {
 export const SignInScreen: React.FC<SignInScreenProps> = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const {signIn, loading} = useAuth();
+  const {signIn, resetPassword, loading} = useAuth();
+
+  const handleForgotPassword = () => {
+    Alert.prompt(
+      'Reset Password',
+      'Enter your email address and we\'ll send you a reset link.',
+      [
+        {text: 'Cancel', style: 'cancel'},
+        {
+          text: 'Send',
+          onPress: async (inputEmail?: string) => {
+            const targetEmail = inputEmail?.trim() || email.trim();
+            if (!targetEmail || !targetEmail.includes('@')) {
+              Alert.alert('Error', 'Please enter a valid email address');
+              return;
+            }
+            const {error} = await resetPassword(targetEmail);
+            if (error) {
+              Alert.alert('Error', error.message);
+            } else {
+              Alert.alert('Check Your Email', 'A password reset link has been sent to ' + targetEmail);
+            }
+          },
+        },
+      ],
+      'plain-text',
+      email.trim(),
+    );
+  };
 
   const validateForm = () => {
     if (!email.trim()) {
@@ -103,7 +131,7 @@ export const SignInScreen: React.FC<SignInScreenProps> = ({navigation}) => {
               />
             </View>
 
-            <TouchableOpacity style={styles.forgotPassword}>
+            <TouchableOpacity style={styles.forgotPassword} onPress={handleForgotPassword}>
               <Text style={styles.forgotPasswordText}>Forgot password?</Text>
             </TouchableOpacity>
 

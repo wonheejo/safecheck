@@ -42,6 +42,19 @@ export const SettingsScreen: React.FC = () => {
   const [saving, setSaving] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
 
+  // Sync local state when userProfile loads or changes
+  useEffect(() => {
+    if (userProfile) {
+      setInactivityThreshold(userProfile.inactivity_threshold_hours ?? 24);
+      setGracePeriod(userProfile.grace_period_hours ?? 2);
+      setReminderFrequency(userProfile.reminder_frequency_hours ?? 4);
+      setSleepStart(userProfile.sleep_start_time ?? null);
+      setSleepEnd(userProfile.sleep_end_time ?? null);
+      setMonitoringEnabled(userProfile.monitoring_enabled ?? true);
+      setHasChanges(false);
+    }
+  }, [userProfile]);
+
   useEffect(() => {
     if (userProfile) {
       const changed =

@@ -1,24 +1,37 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
   SafeAreaView,
-  Image,
+  Alert,
 } from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {AuthStackParamList} from '../../navigation/types';
+import {useAuth} from '../../hooks/useAuth';
 
 type WelcomeScreenProps = {
   navigation: NativeStackNavigationProp<AuthStackParamList, 'Welcome'>;
 };
 
 export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({navigation}) => {
+  const {signInWithGoogle, loading} = useAuth();
+  const [googleLoading, setGoogleLoading] = useState(false);
+
   const handleGoogleSignIn = async () => {
-    // TODO: Implement Google Sign-In
-    // For now, navigate to email sign up
-    navigation.navigate('SignUp');
+    setGoogleLoading(true);
+    try {
+      const {error} = await signInWithGoogle();
+      if (error) {
+        Alert.alert('Sign In Failed', error.message);
+      }
+      // Auth state change will handle navigation
+    } catch (e: any) {
+      Alert.alert('Sign In Failed', e.message || 'Something went wrong');
+    } finally {
+      setGoogleLoading(false);
+    }
   };
 
   return (
@@ -68,9 +81,12 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({navigation}) => {
 
         <View style={styles.buttons}>
           <TouchableOpacity
-            style={styles.googleButton}
-            onPress={handleGoogleSignIn}>
-            <Text style={styles.googleButtonText}>Continue with Google</Text>
+            style={[styles.googleButton, (loading || googleLoading) && styles.buttonDisabled]}
+            onPress={handleGoogleSignIn}
+            disabled={loading || googleLoading}>
+            <Text style={styles.googleButtonText}>
+              {googleLoading ? 'Signing in...' : 'Continue with Google'}
+            </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -176,6 +192,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     gap: 12,
+  },
+  buttonDisabled: {
+    opacity: 0.6,
   },
   googleButtonText: {
     fontSize: 16,

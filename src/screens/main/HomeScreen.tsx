@@ -121,6 +121,14 @@ export const HomeScreen: React.FC = () => {
             </Text>
           </View>
           <View style={styles.infoRow}>
+            <Text style={styles.infoLabel}>Quiet hours</Text>
+            <Text style={styles.infoValue}>
+              {userProfile?.sleep_start_time && userProfile?.sleep_end_time
+                ? `${userProfile.sleep_start_time.slice(0, 5)} – ${userProfile.sleep_end_time.slice(0, 5)}`
+                : 'Not set'}
+            </Text>
+          </View>
+          <View style={styles.infoRow}>
             <Text style={styles.infoLabel}>Status</Text>
             <Text style={[styles.infoValue, {color: userProfile?.monitoring_enabled ? '#22C55E' : '#EF4444'}]}>
               {userProfile?.monitoring_enabled ? 'Active' : 'Paused'}

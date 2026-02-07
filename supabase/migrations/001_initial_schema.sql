@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS public.users (
 
 -- Trusted contacts table
 CREATE TABLE IF NOT EXISTS public.trusted_contacts (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
   name TEXT NOT NULL,
   phone_number TEXT NOT NULL,
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS public.trusted_contacts (
 
 -- Check-ins audit log
 CREATE TABLE IF NOT EXISTS public.check_ins (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
   source TEXT NOT NULL CHECK (source IN ('app_open', 'manual', 'notification')),
   created_at TIMESTAMPTZ DEFAULT NOW()
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS public.check_ins (
 
 -- Alerts log
 CREATE TABLE IF NOT EXISTS public.alerts_log (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
   alert_type TEXT NOT NULL CHECK (alert_type IN ('warning', 'sms_alert')),
   status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'sent', 'failed')),
