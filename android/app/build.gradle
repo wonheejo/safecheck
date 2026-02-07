@@ -56,13 +56,21 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+            if (project.hasProperty('SAFECHECK_RELEASE_STORE_FILE')) {
+                storeFile file(SAFECHECK_RELEASE_STORE_FILE)
+                storePassword SAFECHECK_RELEASE_STORE_PASSWORD
+                keyAlias SAFECHECK_RELEASE_KEY_ALIAS
+                keyPassword SAFECHECK_RELEASE_KEY_PASSWORD
+            }
+        }
     }
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
         }
         release {
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
