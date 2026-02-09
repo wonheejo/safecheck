@@ -39,10 +39,46 @@
               "client_type": 3
             },
             {
-              "client_id": "788406239968-c22i4ens804m37t6p0ffmqns2hsqaud7.apps.googleusercontent.com",
+              "client_id": "788406239968-1nil4i9h4grska5tsl9gniqubqhugng4.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.safecheck"
+                "bundle_id": "io.safecheck.app"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:788406239968:android:a598eae15ceef5bb354685",
+        "android_client_info": {
+          "package_name": "io.safecheck.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "788406239968-gilm11kliqn7557t5f27f7qfj9j3cg5q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmxCAbpTj26VbMxjYDCYfFXh62mlNJwdw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "788406239968-gilm11kliqn7557t5f27f7qfj9j3cg5q.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "788406239968-1nil4i9h4grska5tsl9gniqubqhugng4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "io.safecheck.app"
               }
             }
           ]

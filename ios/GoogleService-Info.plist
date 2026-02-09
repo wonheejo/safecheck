@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CLIENT_ID</key>
+	<string>788406239968-1nil4i9h4grska5tsl9gniqubqhugng4.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.788406239968-1nil4i9h4grska5tsl9gniqubqhugng4</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>788406239968-s1hkbtg2q3mdk56ckqvqda3oo7sksgfr.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyAHgdyJ-VSx_gOgI7hORA9XkkunJuqDJM0</string>
 	<key>GCM_SENDER_ID</key>
@@ -9,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.safecheck</string>
+	<string>io.safecheck.app</string>
 	<key>PROJECT_ID</key>
 	<string>safecheck-372f1</string>
 	<key>STORAGE_BUCKET</key>
@@ -25,10 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:788406239968:ios:51d22ec384afa429354685</string>
-	<key>CLIENT_ID</key>
-	<string>788406239968-j2vd0u27thbvm4n7pr6bkper1if5ce55.apps.googleusercontent.com</string>
-	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.788406239968-j2vd0u27thbvm4n7pr6bkper1if5ce55</string>
+	<string>1:788406239968:ios:d46c48b81025f595354685</string>
 </dict>
 </plist>
