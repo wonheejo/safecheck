@@ -36,7 +36,7 @@ export const TestAlertScreen: React.FC<TestAlertScreenProps> = ({navigation}) =>
       if (!granted) {
         Alert.alert(
           'Notifications Required',
-          'SafeCheck needs notifications to remind you to check in and warn you before alerting your contacts. Please enable notifications in Settings.',
+          'JustInCase needs notifications to remind you to check in and warn you before alerting your contacts. Please enable notifications in Settings.',
         );
       }
     } finally {
@@ -64,7 +64,7 @@ export const TestAlertScreen: React.FC<TestAlertScreenProps> = ({navigation}) =>
     // For now, we'll just show a success message
     Alert.alert(
       'Setup Complete!',
-      'SafeCheck is now monitoring your activity. Remember to check in regularly!',
+      'JustInCase is now monitoring your activity. Remember to check in regularly!',
       [{text: 'OK'}],
     );
   };
@@ -167,7 +167,7 @@ export const TestAlertScreen: React.FC<TestAlertScreenProps> = ({navigation}) =>
           <TouchableOpacity
             style={styles.completeButton}
             onPress={handleComplete}>
-            <Text style={styles.completeButtonText}>Start Using SafeCheck</Text>
+            <Text style={styles.completeButtonText}>Start Using JustInCase</Text>
           </TouchableOpacity>
         </View>
       </View>

@@ -30,7 +30,7 @@ export const PrivacyPolicyScreen: React.FC<PrivacyPolicyScreenProps> = ({
 
         <Text style={styles.sectionTitle}>1. Data We Collect</Text>
         <Text style={styles.body}>
-          SafeCheck collects the following information:{'\n\n'}
+          JustInCase collects the following information:{'\n\n'}
           - <Text style={styles.bold}>Account information:</Text> Your name and
           email address (provided via Google Sign-In){'\n'}
           - <Text style={styles.bold}>Trusted contacts:</Text> Names and phone
@@ -45,7 +45,7 @@ export const PrivacyPolicyScreen: React.FC<PrivacyPolicyScreenProps> = ({
 
         <Text style={styles.sectionTitle}>2. How We Use Your Data</Text>
         <Text style={styles.body}>
-          Your data is used exclusively to provide the SafeCheck service:{'\n\n'}
+          Your data is used exclusively to provide the JustInCase service:{'\n\n'}
           - Monitor your check-in activity against your configured threshold
           {'\n'}
           - Send you push notification reminders and warnings{'\n'}
@@ -55,7 +55,7 @@ export const PrivacyPolicyScreen: React.FC<PrivacyPolicyScreenProps> = ({
 
         <Text style={styles.sectionTitle}>3. Third-Party Services</Text>
         <Text style={styles.body}>
-          SafeCheck uses the following third-party services to operate:{'\n\n'}
+          JustInCase uses the following third-party services to operate:{'\n\n'}
           - <Text style={styles.bold}>Supabase</Text> — Authentication and
           database hosting. Your account data and check-in records are stored in
           Supabase's cloud infrastructure.{'\n\n'}
@@ -102,7 +102,7 @@ export const PrivacyPolicyScreen: React.FC<PrivacyPolicyScreenProps> = ({
 
         <Text style={styles.sectionTitle}>7. Children's Privacy</Text>
         <Text style={styles.body}>
-          SafeCheck is not intended for use by anyone under the age of 18. We do
+          JustInCase is not intended for use by anyone under the age of 18. We do
           not knowingly collect personal data from minors. If we become aware
           that we have collected data from a minor, we will take steps to delete
           it promptly.
@@ -112,7 +112,7 @@ export const PrivacyPolicyScreen: React.FC<PrivacyPolicyScreenProps> = ({
         <Text style={styles.body}>
           We may update this Privacy Policy from time to time. If we make
           material changes, we will notify you through the app. Your continued
-          use of SafeCheck after changes are posted constitutes your acceptance
+          use of JustInCase after changes are posted constitutes your acceptance
           of the updated policy.
         </Text>
 

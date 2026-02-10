@@ -39,9 +39,9 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({navigation}) => {
       <View style={styles.content}>
         <View style={styles.header}>
           <View style={styles.logoContainer}>
-            <Text style={styles.logo}>SC</Text>
+            <Text style={styles.logo}>JIC</Text>
           </View>
-          <Text style={styles.title}>SafeCheck</Text>
+          <Text style={styles.title}>JustInCase</Text>
           <Text style={styles.subtitle}>
             Peace of mind for you and your loved ones
           </Text>

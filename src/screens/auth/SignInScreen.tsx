@@ -99,7 +99,7 @@ export const SignInScreen: React.FC<SignInScreenProps> = ({navigation}) => {
             </TouchableOpacity>
             <Text style={styles.title}>Welcome Back</Text>
             <Text style={styles.subtitle}>
-              Sign in to continue with SafeCheck
+              Sign in to continue with JustInCase
             </Text>
           </View>
 

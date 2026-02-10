@@ -242,7 +242,7 @@ export const SettingsScreen: React.FC = () => {
 
         {/* Version Info */}
         <View style={styles.footer}>
-          <Text style={styles.version}>SafeCheck v1.0.0</Text>
+          <Text style={styles.version}>JustInCase v1.0.0</Text>
         </View>
       </ScrollView>
     </SafeAreaView>

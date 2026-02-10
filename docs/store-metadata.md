@@ -1,15 +1,15 @@
-# SafeCheck — Store Metadata
+# JustInCase App — Store Metadata
 
 ## General Info (Both Stores)
 
-- **App Name:** SafeCheck
+- **App Name:** JustInCase App
 - **Support Email:** wonheejo@gmail.com
 - **Privacy Policy URL:** https://wonheejo.github.io/safecheck/privacy-policy.html
 - **Terms of Service URL:** https://wonheejo.github.io/safecheck/terms-of-service.html
-- **Copyright:** 2026 SafeCheck
+- **Copyright:** 2026 JustInCase App
 - **Age Rating:** 17+ / Mature (safety-related app)
 - **Content Rating:** No violence, no sexual content, no profanity
-- **Price:** Free
+- **Price:** 5,000 KRW (~$3.99 USD)
 
 ---
 
@@ -33,17 +33,17 @@ Personal Safety Check-Ins
 
 **Promotional Text (max 170 chars):**
 ```
-Stay connected with the people who care about you. SafeCheck monitors your activity and alerts trusted contacts if you don't check in.
+Stay connected with the people who care about you. JustInCase monitors your activity and alerts trusted contacts if you don't check in.
 ```
 
 **Description:**
 ```
-SafeCheck is a personal safety app that monitors your phone activity and automatically alerts your trusted contacts via SMS if you don't check in within a set time window.
+JustInCase is a personal safety app that monitors your phone activity and automatically alerts your trusted contacts via SMS if you don't check in within a set time window.
 
 HOW IT WORKS
 • Set your inactivity threshold (24, 48, or 72 hours)
 • Add up to 3 trusted contacts with their phone numbers
-• SafeCheck tracks your check-ins automatically when you open the app
+• JustInCase tracks your check-ins automatically when you open the app
 • If you don't check in before the timer runs out, you'll receive a warning notification
 • If you still don't respond within the grace period, SMS alerts are sent to your trusted contacts
 
@@ -61,7 +61,7 @@ WHO IS IT FOR?
 • Families who want peace of mind about loved ones
 • Anyone who wants a simple, automatic way to stay connected
 
-SafeCheck is not a replacement for emergency services. Always call 911 (or your local emergency number) in an emergency.
+JustInCase is not a replacement for emergency services. Always call 911 (or your local emergency number) in an emergency.
 ```
 
 ### App Store Description (Korean)
@@ -73,12 +73,12 @@ SafeCheck is not a replacement for emergency services. Always call 911 (or your 
 
 **Promotional Text:**
 ```
-소중한 사람들과 연결 상태를 유지하세요. SafeCheck은 활동을 모니터링하고 체크인하지 않으면 신뢰할 수 있는 연락처에 알립니다.
+소중한 사람들과 연결 상태를 유지하세요. JustInCase는 활동을 모니터링하고 체크인하지 않으면 신뢰할 수 있는 연락처에 알립니다.
 ```
 
 **Description:**
 ```
-SafeCheck은 휴대폰 활동을 모니터링하고, 설정된 시간 내에 체크인하지 않으면 신뢰할 수 있는 연락처에 SMS로 자동 알림을 보내는 개인 안전 앱입니다.
+JustInCase는 휴대폰 활동을 모니터링하고, 설정된 시간 내에 체크인하지 않으면 신뢰할 수 있는 연락처에 SMS로 자동 알림을 보내는 개인 안전 앱입니다.
 
 사용 방법
 • 비활성 기준 시간을 설정하세요 (24시간, 48시간 또는 72시간)
@@ -101,7 +101,7 @@ SafeCheck은 휴대폰 활동을 모니터링하고, 설정된 시간 내에 체
 • 가족의 안전을 확인하고 싶은 분들
 • 간단하고 자동으로 연결 상태를 유지하고 싶은 분들
 
-SafeCheck은 긴급 서비스를 대체하지 않습니다. 긴급 상황 시 항상 119에 전화하세요.
+JustInCase는 긴급 서비스를 대체하지 않습니다. 긴급 상황 시 항상 119에 전화하세요.
 ```
 
 ---

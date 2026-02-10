@@ -30,7 +30,7 @@ export const TermsOfServiceScreen: React.FC<TermsOfServiceScreenProps> = ({
 
         <Text style={styles.sectionTitle}>1. Service Description</Text>
         <Text style={styles.body}>
-          SafeCheck is a personal safety monitoring application that tracks your
+          JustInCase is a personal safety monitoring application that tracks your
           check-in activity and alerts your designated trusted contacts via SMS
           if you fail to check in within your configured time window. The service
           is intended to provide an additional layer of personal safety and peace
@@ -39,7 +39,7 @@ export const TermsOfServiceScreen: React.FC<TermsOfServiceScreenProps> = ({
 
         <Text style={styles.sectionTitle}>2. Eligibility</Text>
         <Text style={styles.body}>
-          You must be at least 18 years old to use SafeCheck. By creating an
+          You must be at least 18 years old to use JustInCase. By creating an
           account, you represent that you meet this age requirement and have the
           legal capacity to enter into these terms.
         </Text>
@@ -58,7 +58,7 @@ export const TermsOfServiceScreen: React.FC<TermsOfServiceScreenProps> = ({
 
         <Text style={styles.sectionTitle}>4. SMS Consent & Messaging</Text>
         <Text style={styles.body}>
-          By using SafeCheck, you authorize the service to send SMS messages to
+          By using JustInCase, you authorize the service to send SMS messages to
           your trusted contacts on your behalf when an inactivity alert is
           triggered. These messages will identify you by name and inform your
           contacts that you have not checked in. Standard messaging rates may
@@ -68,27 +68,27 @@ export const TermsOfServiceScreen: React.FC<TermsOfServiceScreenProps> = ({
 
         <Text style={styles.sectionTitle}>5. Push Notifications</Text>
         <Text style={styles.body}>
-          SafeCheck requires push notification permissions to send you check-in
+          JustInCase requires push notification permissions to send you check-in
           reminders and inactivity warnings. Disabling push notifications may
-          prevent the service from functioning as intended. SafeCheck is not
+          prevent the service from functioning as intended. JustInCase is not
           liable for missed alerts due to disabled notifications.
         </Text>
 
         <Text style={styles.sectionTitle}>6. Limitations of Service</Text>
         <Text style={styles.body}>
-          SafeCheck is not an emergency service and should not be used as a
+          JustInCase is not an emergency service and should not be used as a
           substitute for calling emergency services (e.g., 911, 112, 119). The
           service depends on internet connectivity, push notification delivery,
           and third-party SMS providers. We do not guarantee that alerts will be
           delivered in all circumstances.{'\n\n'}
-          SafeCheck is provided "as is" without warranties of any kind, express
+          JustInCase is provided "as is" without warranties of any kind, express
           or implied. We do not warrant that the service will be uninterrupted,
           timely, secure, or error-free.
         </Text>
 
         <Text style={styles.sectionTitle}>7. Limitation of Liability</Text>
         <Text style={styles.body}>
-          To the fullest extent permitted by law, SafeCheck and its operators
+          To the fullest extent permitted by law, JustInCase and its operators
           shall not be liable for any indirect, incidental, special,
           consequential, or punitive damages, or any loss of profits or
           revenues, whether incurred directly or indirectly, arising from your
@@ -107,7 +107,7 @@ export const TermsOfServiceScreen: React.FC<TermsOfServiceScreenProps> = ({
         <Text style={styles.body}>
           We may update these Terms of Service from time to time. If we make
           material changes, we will notify you through the app. Your continued
-          use of SafeCheck after changes are posted constitutes your acceptance
+          use of JustInCase after changes are posted constitutes your acceptance
           of the revised terms.
         </Text>
 

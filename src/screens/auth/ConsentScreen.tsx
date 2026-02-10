@@ -39,9 +39,9 @@ export const ConsentScreen: React.FC<ConsentScreenProps> = ({navigation}) => {
 
         <View style={styles.content}>
           <View style={styles.infoCard}>
-            <Text style={styles.infoTitle}>How SafeCheck Works</Text>
+            <Text style={styles.infoTitle}>How JustInCase Works</Text>
             <Text style={styles.infoText}>
-              SafeCheck monitors your check-ins and alerts your trusted contacts
+              JustInCase monitors your check-ins and alerts your trusted contacts
               if you don't respond within your configured time window. This
               service is designed to provide peace of mind for you and your
               loved ones.
@@ -103,7 +103,7 @@ export const ConsentScreen: React.FC<ConsentScreenProps> = ({navigation}) => {
                 onPress={() => navigation.navigate('PrivacyPolicy')}>
                 Privacy Policy
               </Text>
-              {' '}and consent to SafeCheck sending SMS messages to my trusted
+              {' '}and consent to JustInCase sending SMS messages to my trusted
               contacts on my behalf
             </Text>
           </View>

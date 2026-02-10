@@ -75,7 +75,7 @@ export const AddContactsScreen: React.FC<AddContactsScreenProps> = ({
   const handleSkip = () => {
     Alert.alert(
       'Skip Adding Contacts?',
-      'Without trusted contacts, SafeCheck cannot alert anyone if you don\'t check in. Are you sure?',
+      'Without trusted contacts, JustInCase cannot alert anyone if you don\'t check in. Are you sure?',
       [
         {text: 'Go Back', style: 'cancel'},
         {
