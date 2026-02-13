@@ -2,6 +2,7 @@ import 'react-native-url-polyfill/auto';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createClient} from '@supabase/supabase-js';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import {appleAuth} from '@invertase/react-native-apple-authentication';
 import {SUPABASE_URL, SUPABASE_ANON_KEY, GOOGLE_CLIENT_ID, GOOGLE_IOS_CLIENT_ID} from '@env';
 import type {User, TrustedContact, CheckIn, AlertLog} from '../types';
 
@@ -69,6 +70,26 @@ export const signInWithGoogle = async () => {
   const {data, error} = await supabase.auth.signInWithIdToken({
     provider: 'google',
     token: response.data.idToken,
+  });
+
+  return {data, error};
+};
+
+// Apple Sign-In
+export const signInWithApple = async () => {
+  const appleAuthRequestResponse = await appleAuth.performRequest({
+    requestedOperation: appleAuth.Operation.LOGIN,
+    requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
+  });
+
+  if (!appleAuthRequestResponse.identityToken) {
+    throw new Error('Apple Sign-In failed: no identityToken returned');
+  }
+
+  const {data, error} = await supabase.auth.signInWithIdToken({
+    provider: 'apple',
+    token: appleAuthRequestResponse.identityToken,
+    nonce: appleAuthRequestResponse.nonce,
   });
 
   return {data, error};

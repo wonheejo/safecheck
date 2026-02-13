@@ -5,6 +5,7 @@ import {
   signUpWithEmail,
   signInWithEmail,
   signInWithGoogle as authSignInWithGoogle,
+  signInWithApple as authSignInWithApple,
   signOut as authSignOut,
   getUserProfile,
   resetPassword as authResetPassword,
@@ -104,6 +105,20 @@ export function useAuth() {
     }
   }, []);
 
+  const signInWithApple = useCallback(async () => {
+    setState(prev => ({...prev, loading: true}));
+    try {
+      const result = await authSignInWithApple();
+      if (result.error) {
+        setState(prev => ({...prev, loading: false}));
+      }
+      return result;
+    } catch (error: any) {
+      setState(prev => ({...prev, loading: false}));
+      return {data: null, error: {message: error.message}};
+    }
+  }, []);
+
   const resetPassword = useCallback(async (email: string) => {
     const result = await authResetPassword(email);
     return result;
@@ -134,6 +149,7 @@ export function useAuth() {
     signUp,
     signIn,
     signInWithGoogle,
+    signInWithApple,
     signOut,
     resetPassword,
     refreshProfile,

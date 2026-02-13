@@ -55,15 +55,26 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({navigation}) => {
       return;
     }
 
-    const {error} = await signUp(email.trim(), password, fullName.trim());
+    try {
+      const {error} = await signUp(email.trim(), password, fullName.trim());
 
-    if (error) {
-      Alert.alert('Sign Up Failed', error.message);
-      return;
+      if (error) {
+        Alert.alert('Sign Up Failed', error.message);
+        return;
+      }
+
+      // Navigate to consent screen after successful sign up
+      navigation.navigate('Consent');
+    } catch (e: any) {
+      if (e.message?.includes('Network request failed')) {
+        Alert.alert(
+          'Connection Error',
+          'Unable to connect to the server. Please check your internet connection and try again.',
+        );
+      } else {
+        Alert.alert('Sign Up Failed', e.message || 'Something went wrong');
+      }
     }
-
-    // Navigate to consent screen after successful sign up
-    navigation.navigate('Consent');
   };
 
   return (

@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   SafeAreaView,
+  Platform,
   Alert,
 } from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -16,8 +17,9 @@ type WelcomeScreenProps = {
 };
 
 export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({navigation}) => {
-  const {signInWithGoogle, loading} = useAuth();
+  const {signInWithGoogle, signInWithApple, loading} = useAuth();
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [appleLoading, setAppleLoading] = useState(false);
 
   const handleGoogleSignIn = async () => {
     setGoogleLoading(true);
@@ -26,11 +28,24 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({navigation}) => {
       if (error) {
         Alert.alert('Sign In Failed', error.message);
       }
-      // Auth state change will handle navigation
     } catch (e: any) {
       Alert.alert('Sign In Failed', e.message || 'Something went wrong');
     } finally {
       setGoogleLoading(false);
+    }
+  };
+
+  const handleAppleSignIn = async () => {
+    setAppleLoading(true);
+    try {
+      const {error} = await signInWithApple();
+      if (error) {
+        Alert.alert('Sign In Failed', error.message);
+      }
+    } catch (e: any) {
+      Alert.alert('Sign In Failed', e.message || 'Something went wrong');
+    } finally {
+      setAppleLoading(false);
     }
   };
 
@@ -80,6 +95,17 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({navigation}) => {
         </View>
 
         <View style={styles.buttons}>
+          {Platform.OS === 'ios' && (
+            <TouchableOpacity
+              style={[styles.appleButton, (loading || appleLoading) && styles.buttonDisabled]}
+              onPress={handleAppleSignIn}
+              disabled={loading || appleLoading}>
+              <Text style={styles.appleButtonText}>
+                {appleLoading ? 'Signing in...' : '\uF8FF Sign in with Apple'}
+              </Text>
+            </TouchableOpacity>
+          )}
+
           <TouchableOpacity
             style={[styles.googleButton, (loading || googleLoading) && styles.buttonDisabled]}
             onPress={handleGoogleSignIn}
@@ -181,6 +207,19 @@ const styles = StyleSheet.create({
   },
   buttons: {
     gap: 12,
+  },
+  appleButton: {
+    backgroundColor: '#000000',
+    paddingVertical: 14,
+    borderRadius: 12,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  appleButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#FFFFFF',
   },
   googleButton: {
     backgroundColor: '#FFFFFF',

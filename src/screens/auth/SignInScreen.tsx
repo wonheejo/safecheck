@@ -73,14 +73,25 @@ export const SignInScreen: React.FC<SignInScreenProps> = ({navigation}) => {
       return;
     }
 
-    const {error} = await signIn(email.trim(), password);
+    try {
+      const {error} = await signIn(email.trim(), password);
 
-    if (error) {
-      Alert.alert('Sign In Failed', error.message);
-      return;
+      if (error) {
+        Alert.alert('Sign In Failed', error.message);
+        return;
+      }
+
+      // Auth state change will handle navigation
+    } catch (e: any) {
+      if (e.message?.includes('Network request failed')) {
+        Alert.alert(
+          'Connection Error',
+          'Unable to connect to the server. Please check your internet connection and try again.',
+        );
+      } else {
+        Alert.alert('Sign In Failed', e.message || 'Something went wrong');
+      }
     }
-
-    // Auth state change will handle navigation
   };
 
   return (
