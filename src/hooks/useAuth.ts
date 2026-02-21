@@ -30,21 +30,48 @@ export function useAuth() {
   });
 
   const fetchUserProfile = useCallback(async (userId: string) => {
-    const {data} = await getUserProfile(userId);
-    return data;
+    const timeout = new Promise<null>((resolve) => setTimeout(() => {
+
+      resolve(null);
+    }, 5000));
+    const fetch = getUserProfile(userId).then(({data}) => data);
+    return Promise.race([fetch, timeout]);
   }, []);
 
   useEffect(() => {
-    // Get initial session
+    // Get initial session with timeout to prevent infinite loading
+    const initTimeout = setTimeout(() => {
+      setState(prev => {
+        if (!prev.initialized) {
+          return {...prev, loading: false, initialized: true};
+        }
+        return prev;
+      });
+    }, 10000);
+
     supabase.auth.getSession().then(async ({data: {session}}) => {
+      clearTimeout(initTimeout);
       let profile = null;
       if (session?.user) {
-        profile = await fetchUserProfile(session.user.id);
+        try {
+          profile = await fetchUserProfile(session.user.id);
+        } catch (_) {
+          // Profile fetch failed — continue without profile
+        }
       }
       setState({
         session,
         authUser: session?.user ?? null,
         userProfile: profile,
+        loading: false,
+        initialized: true,
+      });
+    }).catch(() => {
+      clearTimeout(initTimeout);
+      setState({
+        session: null,
+        authUser: null,
+        userProfile: null,
         loading: false,
         initialized: true,
       });
@@ -55,7 +82,11 @@ export function useAuth() {
       async (_event, session) => {
         let profile = null;
         if (session?.user) {
-          profile = await fetchUserProfile(session.user.id);
+          try {
+            profile = await fetchUserProfile(session.user.id);
+          } catch (_) {
+            // Profile fetch failed — continue without profile
+          }
         }
         setState(prev => ({
           ...prev,
@@ -68,6 +99,7 @@ export function useAuth() {
     );
 
     return () => {
+      clearTimeout(initTimeout);
       subscription.unsubscribe();
     };
   }, [fetchUserProfile]);

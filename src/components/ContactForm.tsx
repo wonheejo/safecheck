@@ -43,7 +43,11 @@ export const ContactForm: React.FC<ContactFormProps> = ({
   };
 
   const getE164PhoneNumber = () => {
-    const cleanNumber = formatPhoneNumber(phoneNumber);
+    let cleanNumber = formatPhoneNumber(phoneNumber);
+    // Strip leading 0 for countries that use it (e.g. Korea 010 -> 10, Japan 090 -> 90)
+    if (cleanNumber.startsWith('0')) {
+      cleanNumber = cleanNumber.substring(1);
+    }
     return `${selectedCountry.dialCode}${cleanNumber}`;
   };
 
@@ -84,62 +88,61 @@ export const ContactForm: React.FC<ContactFormProps> = ({
   );
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>
-        {isEditing ? 'Edit Contact' : 'Add Trusted Contact'}
-      </Text>
+      <View style={styles.container}>
+        <Text style={styles.title}>
+          {isEditing ? 'Edit Contact' : 'Add Trusted Contact'}
+        </Text>
 
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Name</Text>
-        <TextInput
-          style={styles.input}
-          value={name}
-          onChangeText={setName}
-          placeholder="Contact name"
-          placeholderTextColor="#9CA3AF"
-          autoCapitalize="words"
-        />
-      </View>
-
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Phone Number</Text>
-        <View style={styles.phoneInputContainer}>
-          <TouchableOpacity
-            style={styles.countrySelector}
-            onPress={() => setShowCountryPicker(true)}>
-            <Text style={styles.countryFlag}>{selectedCountry.flag}</Text>
-            <Text style={styles.countryDialCodeSelected}>
-              {selectedCountry.dialCode}
-            </Text>
-          </TouchableOpacity>
+        <View style={styles.inputGroup}>
+          <Text style={styles.label}>Name</Text>
           <TextInput
-            style={styles.phoneInput}
-            value={phoneNumber}
-            onChangeText={setPhoneNumber}
-            placeholder="Phone number"
+            style={styles.input}
+            value={name}
+            onChangeText={setName}
+            placeholder="Contact name"
             placeholderTextColor="#9CA3AF"
-            keyboardType="phone-pad"
+            autoCapitalize="words"
           />
         </View>
-      </View>
 
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={[styles.button, styles.cancelButton]}
-          onPress={onCancel}
-          disabled={loading}>
-          <Text style={styles.cancelButtonText}>Cancel</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.button, styles.submitButton, loading && styles.buttonDisabled]}
-          onPress={handleSubmit}
-          disabled={loading}>
-          <Text style={styles.submitButtonText}>
-            {loading ? 'Saving...' : isEditing ? 'Save' : 'Add Contact'}
-          </Text>
-        </TouchableOpacity>
-      </View>
+        <View style={styles.inputGroup}>
+          <Text style={styles.label}>Phone Number</Text>
+          <View style={styles.phoneInputContainer}>
+            <TouchableOpacity
+              style={styles.countrySelector}
+              onPress={() => setShowCountryPicker(true)}>
+              <Text style={styles.countryFlag}>{selectedCountry.flag}</Text>
+              <Text style={styles.countryDialCodeSelected}>
+                {selectedCountry.dialCode}
+              </Text>
+            </TouchableOpacity>
+            <TextInput
+              style={styles.phoneInput}
+              value={phoneNumber}
+              onChangeText={setPhoneNumber}
+              placeholder="Phone number"
+              placeholderTextColor="#9CA3AF"
+              keyboardType="phone-pad"
+            />
+          </View>
+        </View>
 
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={[styles.button, styles.cancelButton]}
+            onPress={onCancel}
+            disabled={loading}>
+            <Text style={styles.cancelButtonText}>Cancel</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.button, styles.submitButton, loading && styles.buttonDisabled]}
+            onPress={handleSubmit}
+            disabled={loading}>
+            <Text style={styles.submitButtonText}>
+              {loading ? 'Saving...' : isEditing ? 'Save' : 'Add Contact'}
+            </Text>
+          </TouchableOpacity>
+        </View>
       <Modal
         visible={showCountryPicker}
         animationType="slide"
@@ -169,8 +172,6 @@ export const ContactForm: React.FC<ContactFormProps> = ({
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
   },
   title: {
     fontSize: 20,

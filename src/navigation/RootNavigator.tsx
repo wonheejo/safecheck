@@ -13,7 +13,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 export const RootNavigator: React.FC = () => {
   const {isAuthenticated, initialized, userProfile, loading} = useAuth();
 
-  if (!initialized || loading) {
+  if (!initialized) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#3B82F6" />

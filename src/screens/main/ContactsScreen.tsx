@@ -8,6 +8,10 @@ import {
   FlatList,
   Alert,
   Modal,
+  TouchableWithoutFeedback,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import {useAuth} from '../../hooks/useAuth';
 import {useContacts} from '../../hooks/useContacts';
@@ -175,31 +179,36 @@ export const ContactsScreen: React.FC = () => {
         animationType="slide"
         transparent={true}
         onRequestClose={() => setShowForm(false)}>
-        <View style={styles.modalOverlay}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={styles.modalKeyboardView}>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={styles.modalOverlay} />
+          </TouchableWithoutFeedback>
           <View style={styles.modalContent}>
-            <ContactForm
-              onSubmit={handleFormSubmit}
-              onCancel={() => {
-                setShowForm(false);
-                setEditingContact(null);
-              }}
-              initialValues={
-                editingContact
-                  ? {
-                      name: editingContact.name,
-                      phoneNumber: editingContact.phone_number.replace(
-                        getCountryInfo(editingContact.country_code).dialCode,
-                        '',
-                      ),
-                      countryCode: editingContact.country_code as CountryCode,
-                    }
-                  : undefined
-              }
-              isEditing={!!editingContact}
-              loading={formLoading}
-            />
+              <ContactForm
+                onSubmit={handleFormSubmit}
+                onCancel={() => {
+                  setShowForm(false);
+                  setEditingContact(null);
+                }}
+                initialValues={
+                  editingContact
+                    ? {
+                        name: editingContact.name,
+                        phoneNumber: editingContact.phone_number.replace(
+                          getCountryInfo(editingContact.country_code).dialCode,
+                          '',
+                        ),
+                        countryCode: editingContact.country_code as CountryCode,
+                      }
+                    : undefined
+                }
+                isEditing={!!editingContact}
+                loading={formLoading}
+              />
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
     </SafeAreaView>
   );
@@ -316,10 +325,12 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#FFFFFF',
   },
+  modalKeyboardView: {
+    flex: 1,
+  },
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'flex-end',
   },
   modalContent: {
     backgroundColor: '#FFFFFF',

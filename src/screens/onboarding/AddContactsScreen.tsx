@@ -8,6 +8,10 @@ import {
   FlatList,
   Modal,
   Alert,
+  TouchableWithoutFeedback,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {OnboardingStackParamList} from '../../navigation/types';
@@ -173,7 +177,12 @@ export const AddContactsScreen: React.FC<AddContactsScreenProps> = ({
         animationType="slide"
         transparent={true}
         onRequestClose={() => setShowForm(false)}>
-        <View style={styles.modalOverlay}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={styles.modalKeyboardView}>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={styles.modalOverlay} />
+          </TouchableWithoutFeedback>
           <View style={styles.modalContent}>
             <ContactForm
               onSubmit={handleAddContact}
@@ -181,7 +190,7 @@ export const AddContactsScreen: React.FC<AddContactsScreenProps> = ({
               loading={formLoading}
             />
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
     </SafeAreaView>
   );
@@ -331,10 +340,12 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#FFFFFF',
   },
+  modalKeyboardView: {
+    flex: 1,
+  },
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'flex-end',
   },
   modalContent: {
     backgroundColor: '#FFFFFF',

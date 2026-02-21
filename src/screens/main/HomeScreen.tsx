@@ -1,16 +1,34 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useCallback} from 'react';
 import {View, Text, StyleSheet, SafeAreaView} from 'react-native';
+import {useFocusEffect} from '@react-navigation/native';
 import {CheckInButton} from '../../components';
 import {useAuth} from '../../hooks/useAuth';
 import {useCheckIn} from '../../hooks/useCheckIn';
 import {registerFcmToken, setupNotificationListeners, setNotificationHandler} from '../../services/notifications';
 
 export const HomeScreen: React.FC = () => {
-  const {userProfile, authUser} = useAuth();
-  const {checkIn, loading, error} = useCheckIn({
+  const {userProfile, authUser, refreshProfile} = useAuth();
+  const {checkIn: rawCheckIn, loading, error} = useCheckIn({
     userId: authUser?.id,
     autoCheckInOnAppOpen: true,
   });
+
+  const checkIn = async () => {
+    const result = await rawCheckIn();
+    if (result) {
+      await refreshProfile();
+    }
+    return result;
+  };
+
+  // Refresh profile when tab is focused (picks up settings changes)
+  useFocusEffect(
+    useCallback(() => {
+      if (authUser?.id) {
+        refreshProfile();
+      }
+    }, [authUser?.id, refreshProfile]),
+  );
 
   useEffect(() => {
     if (authUser?.id) {
@@ -59,6 +77,14 @@ export const HomeScreen: React.FC = () => {
   };
 
   const statusInfo = getStatusInfo();
+
+  const formatDuration = (hours: number) => {
+    if (hours < 1) {
+      const mins = Math.round(hours * 60);
+      return `${mins} minutes`;
+    }
+    return `${hours} hour${hours === 1 ? '' : 's'}`;
+  };
 
   const getTimeSinceLastCheckIn = () => {
     if (!userProfile?.last_seen_at) {
@@ -111,13 +137,13 @@ export const HomeScreen: React.FC = () => {
           <View style={styles.infoRow}>
             <Text style={styles.infoLabel}>Alert after</Text>
             <Text style={styles.infoValue}>
-              {userProfile?.inactivity_threshold_hours || 24} hours of inactivity
+              {formatDuration(userProfile?.inactivity_threshold_hours || 24)} of inactivity
             </Text>
           </View>
           <View style={styles.infoRow}>
             <Text style={styles.infoLabel}>Grace period</Text>
             <Text style={styles.infoValue}>
-              {userProfile?.grace_period_hours || 2} hours
+              {formatDuration(userProfile?.grace_period_hours || 2)}
             </Text>
           </View>
           <View style={styles.infoRow}>
