@@ -8,6 +8,8 @@ import {
   ScrollView,
   Switch,
   Alert,
+  Linking,
+  Platform,
 } from 'react-native';
 import {useAuth} from '../../hooks/useAuth';
 import {updateUserProfile} from '../../api/supabase';
@@ -235,6 +237,20 @@ export const SettingsScreen: React.FC = () => {
             <Text style={styles.accountValue}>{authUser?.email}</Text>
           </View>
 
+          <TouchableOpacity
+            style={styles.manageSubscriptionButton}
+            onPress={() => {
+              const url = Platform.select({
+                ios: 'https://apps.apple.com/account/subscriptions',
+                android: 'https://play.google.com/store/account/subscriptions',
+              });
+              if (url) {
+                Linking.openURL(url);
+              }
+            }}>
+            <Text style={styles.manageSubscriptionText}>Manage Subscription</Text>
+          </TouchableOpacity>
+
           <TouchableOpacity style={styles.signOutButton} onPress={handleSignOut}>
             <Text style={styles.signOutButtonText}>Sign Out</Text>
           </TouchableOpacity>
@@ -242,7 +258,7 @@ export const SettingsScreen: React.FC = () => {
 
         {/* Version Info */}
         <View style={styles.footer}>
-          <Text style={styles.version}>JustInCase v1.0.0</Text>
+          <Text style={styles.version}>JustInCase v1.0.1</Text>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -354,6 +370,18 @@ const styles = StyleSheet.create({
   accountValue: {
     fontSize: 16,
     color: '#111827',
+  },
+  manageSubscriptionButton: {
+    paddingVertical: 14,
+    borderRadius: 12,
+    alignItems: 'center',
+    backgroundColor: '#F3F4F6',
+    marginBottom: 12,
+  },
+  manageSubscriptionText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#3B82F6',
   },
   signOutButton: {
     paddingVertical: 14,

@@ -22,6 +22,7 @@ export type MainTabParamList = {
 
 export type RootStackParamList = {
   Auth: undefined;
+  Paywall: undefined;
   Onboarding: undefined;
   Main: undefined;
 };
