@@ -12,6 +12,7 @@ import {
   Alert,
 } from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {useTranslation} from 'react-i18next';
 import {AuthStackParamList} from '../../navigation/types';
 import {useAuth} from '../../hooks/useAuth';
 
@@ -20,6 +21,7 @@ type SignUpScreenProps = {
 };
 
 export const SignUpScreen: React.FC<SignUpScreenProps> = ({navigation}) => {
+  const {t} = useTranslation();
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -28,23 +30,23 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({navigation}) => {
 
   const validateForm = () => {
     if (!fullName.trim()) {
-      Alert.alert('Error', 'Please enter your full name');
+      Alert.alert(t('common.error'), t('signUp.enterFullName'));
       return false;
     }
     if (!email.trim()) {
-      Alert.alert('Error', 'Please enter your email');
+      Alert.alert(t('common.error'), t('signUp.enterEmail'));
       return false;
     }
     if (!email.includes('@')) {
-      Alert.alert('Error', 'Please enter a valid email');
+      Alert.alert(t('common.error'), t('signUp.enterValidEmail'));
       return false;
     }
     if (password.length < 8) {
-      Alert.alert('Error', 'Password must be at least 8 characters');
+      Alert.alert(t('common.error'), t('signUp.passwordMinLength'));
       return false;
     }
     if (password !== confirmPassword) {
-      Alert.alert('Error', 'Passwords do not match');
+      Alert.alert(t('common.error'), t('signUp.passwordsDoNotMatch'));
       return false;
     }
     return true;
@@ -59,7 +61,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({navigation}) => {
       const {error} = await signUp(email.trim(), password, fullName.trim());
 
       if (error) {
-        Alert.alert('Sign Up Failed', error.message);
+        Alert.alert(t('signUp.signUpFailed'), error.message);
         return;
       }
 
@@ -68,11 +70,11 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({navigation}) => {
     } catch (e: any) {
       if (e.message?.includes('Network request failed')) {
         Alert.alert(
-          'Connection Error',
-          'Unable to connect to the server. Please check your internet connection and try again.',
+          t('common.connectionError'),
+          t('common.connectionErrorMessage'),
         );
       } else {
-        Alert.alert('Sign Up Failed', e.message || 'Something went wrong');
+        Alert.alert(t('signUp.signUpFailed'), e.message || t('common.somethingWentWrong'));
       }
     }
   };
@@ -89,22 +91,22 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({navigation}) => {
             <TouchableOpacity
               style={styles.backButton}
               onPress={() => navigation.goBack()}>
-              <Text style={styles.backButtonText}>{'<'} Back</Text>
+              <Text style={styles.backButtonText}>{t('common.back')}</Text>
             </TouchableOpacity>
-            <Text style={styles.title}>Create Account</Text>
+            <Text style={styles.title}>{t('signUp.title')}</Text>
             <Text style={styles.subtitle}>
-              Sign up to start protecting your loved ones
+              {t('signUp.subtitle')}
             </Text>
           </View>
 
           <View style={styles.form}>
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>Full Name</Text>
+              <Text style={styles.label}>{t('signUp.fullName')}</Text>
               <TextInput
                 style={styles.input}
                 value={fullName}
                 onChangeText={setFullName}
-                placeholder="Your full name"
+                placeholder={t('signUp.fullNamePlaceholder')}
                 placeholderTextColor="#9CA3AF"
                 autoCapitalize="words"
                 autoComplete="name"
@@ -112,12 +114,12 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({navigation}) => {
             </View>
 
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>Email</Text>
+              <Text style={styles.label}>{t('signUp.email')}</Text>
               <TextInput
                 style={styles.input}
                 value={email}
                 onChangeText={setEmail}
-                placeholder="your@email.com"
+                placeholder={t('signUp.emailPlaceholder')}
                 placeholderTextColor="#9CA3AF"
                 autoCapitalize="none"
                 autoComplete="email"
@@ -126,12 +128,12 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({navigation}) => {
             </View>
 
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>Password</Text>
+              <Text style={styles.label}>{t('signUp.password')}</Text>
               <TextInput
                 style={styles.input}
                 value={password}
                 onChangeText={setPassword}
-                placeholder="At least 8 characters"
+                placeholder={t('signUp.passwordPlaceholder')}
                 placeholderTextColor="#9CA3AF"
                 secureTextEntry
                 autoComplete="new-password"
@@ -139,12 +141,12 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({navigation}) => {
             </View>
 
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>Confirm Password</Text>
+              <Text style={styles.label}>{t('signUp.confirmPassword')}</Text>
               <TextInput
                 style={styles.input}
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
-                placeholder="Confirm your password"
+                placeholder={t('signUp.confirmPasswordPlaceholder')}
                 placeholderTextColor="#9CA3AF"
                 secureTextEntry
                 autoComplete="new-password"
@@ -156,14 +158,14 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({navigation}) => {
               onPress={handleSignUp}
               disabled={loading}>
               <Text style={styles.buttonText}>
-                {loading ? 'Creating Account...' : 'Create Account'}
+                {loading ? t('signUp.creatingAccount') : t('signUp.createAccount')}
               </Text>
             </TouchableOpacity>
 
             <View style={styles.signinContainer}>
-              <Text style={styles.signinText}>Already have an account? </Text>
+              <Text style={styles.signinText}>{t('signUp.alreadyHaveAccount')}</Text>
               <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
-                <Text style={styles.signinLink}>Sign In</Text>
+                <Text style={styles.signinLink}>{t('signUp.signIn')}</Text>
               </TouchableOpacity>
             </View>
           </View>

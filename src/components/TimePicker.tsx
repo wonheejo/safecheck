@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet, Modal, ScrollView} from 'react-native';
+import {useTranslation} from 'react-i18next';
 
 interface TimePickerProps {
   label: string;
@@ -16,6 +17,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
   onSelect,
   placeholder = 'Select time',
 }) => {
+  const {t} = useTranslation();
   const [showPicker, setShowPicker] = useState(false);
 
   const formatTime = (time: string | null) => {
@@ -55,7 +57,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>{label}</Text>
               <TouchableOpacity onPress={() => setShowPicker(false)}>
-                <Text style={styles.modalClose}>Close</Text>
+                <Text style={styles.modalClose}>{t('common.close')}</Text>
               </TouchableOpacity>
             </View>
             <ScrollView style={styles.scrollView}>

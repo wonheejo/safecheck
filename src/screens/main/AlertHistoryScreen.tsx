@@ -7,11 +7,14 @@ import {
   FlatList,
   RefreshControl,
 } from 'react-native';
+import {useTranslation} from 'react-i18next';
+import {getLocales} from 'react-native-localize';
 import {useAuth} from '../../hooks/useAuth';
 import {getAlertHistory} from '../../api/supabase';
 import type {AlertLog} from '../../types';
 
 export const AlertHistoryScreen: React.FC = () => {
+  const {t} = useTranslation();
   const {authUser} = useAuth();
   const [alerts, setAlerts] = useState<AlertLog[]>([]);
   const [loading, setLoading] = useState(true);
@@ -44,7 +47,8 @@ export const AlertHistoryScreen: React.FC = () => {
 
   const formatDate = (isoString: string) => {
     const date = new Date(isoString);
-    return date.toLocaleDateString('en-US', {
+    const locale = getLocales()[0]?.languageTag ?? 'en-US';
+    return date.toLocaleDateString(locale, {
       month: 'short',
       day: 'numeric',
       year: 'numeric',
@@ -57,19 +61,19 @@ export const AlertHistoryScreen: React.FC = () => {
     switch (type) {
       case 'warning':
         return {
-          label: 'Warning Sent',
+          label: t('alertHistory.warningSent'),
           color: '#F59E0B',
           bgColor: '#FEF3C7',
         };
       case 'sms_alert':
         return {
-          label: 'SMS Alert',
+          label: t('alertHistory.smsAlert'),
           color: '#EF4444',
           bgColor: '#FEE2E2',
         };
       default:
         return {
-          label: 'Unknown',
+          label: t('alertHistory.unknown'),
           color: '#6B7280',
           bgColor: '#F3F4F6',
         };
@@ -79,13 +83,13 @@ export const AlertHistoryScreen: React.FC = () => {
   const getStatusInfo = (status: AlertLog['status']) => {
     switch (status) {
       case 'sent':
-        return {label: 'Delivered', color: '#22C55E'};
+        return {label: t('alertHistory.delivered'), color: '#22C55E'};
       case 'pending':
-        return {label: 'Pending', color: '#F59E0B'};
+        return {label: t('alertHistory.pending'), color: '#F59E0B'};
       case 'failed':
-        return {label: 'Failed', color: '#EF4444'};
+        return {label: t('alertHistory.failed'), color: '#EF4444'};
       default:
-        return {label: 'Unknown', color: '#6B7280'};
+        return {label: t('alertHistory.unknown'), color: '#6B7280'};
     }
   };
 
@@ -118,9 +122,9 @@ export const AlertHistoryScreen: React.FC = () => {
 
   const renderEmptyState = () => (
     <View style={styles.emptyState}>
-      <Text style={styles.emptyTitle}>No Alert History</Text>
+      <Text style={styles.emptyTitle}>{t('alertHistory.noHistory')}</Text>
       <Text style={styles.emptyDescription}>
-        When alerts are triggered, they'll appear here.
+        {t('alertHistory.noHistoryDesc')}
       </Text>
     </View>
   );
@@ -129,7 +133,7 @@ export const AlertHistoryScreen: React.FC = () => {
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
         <View style={styles.header}>
-          <Text style={styles.title}>Alert History</Text>
+          <Text style={styles.title}>{t('alertHistory.title')}</Text>
         </View>
 
         <FlatList

@@ -9,6 +9,7 @@ import {
   FlatList,
   Alert,
 } from 'react-native';
+import {useTranslation} from 'react-i18next';
 import {COUNTRIES, Country, CountryCode} from '../types';
 
 interface ContactFormProps {
@@ -30,6 +31,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
   isEditing = false,
   loading = false,
 }) => {
+  const {t} = useTranslation();
   const [name, setName] = useState(initialValues?.name || '');
   const [phoneNumber, setPhoneNumber] = useState(initialValues?.phoneNumber || '');
   const [selectedCountry, setSelectedCountry] = useState<Country>(
@@ -53,13 +55,13 @@ export const ContactForm: React.FC<ContactFormProps> = ({
 
   const validateForm = () => {
     if (!name.trim()) {
-      Alert.alert('Error', 'Please enter a name');
+      Alert.alert(t('common.error'), t('contactForm.enterName'));
       return false;
     }
 
     const cleanNumber = formatPhoneNumber(phoneNumber);
     if (cleanNumber.length < 6 || cleanNumber.length > 15) {
-      Alert.alert('Error', 'Please enter a valid phone number');
+      Alert.alert(t('common.error'), t('contactForm.invalidPhone'));
       return false;
     }
 
@@ -82,7 +84,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
         setShowCountryPicker(false);
       }}>
       <Text style={styles.countryFlag}>{item.flag}</Text>
-      <Text style={styles.countryName}>{item.name}</Text>
+      <Text style={styles.countryName}>{t(`countries.${item.code}`)}</Text>
       <Text style={styles.countryDialCode}>{item.dialCode}</Text>
     </TouchableOpacity>
   );
@@ -90,23 +92,23 @@ export const ContactForm: React.FC<ContactFormProps> = ({
   return (
       <View style={styles.container}>
         <Text style={styles.title}>
-          {isEditing ? 'Edit Contact' : 'Add Trusted Contact'}
+          {isEditing ? t('contactForm.editContact') : t('contactForm.addTrustedContact')}
         </Text>
 
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>Name</Text>
+          <Text style={styles.label}>{t('contactForm.name')}</Text>
           <TextInput
             style={styles.input}
             value={name}
             onChangeText={setName}
-            placeholder="Contact name"
+            placeholder={t('contactForm.namePlaceholder')}
             placeholderTextColor="#9CA3AF"
             autoCapitalize="words"
           />
         </View>
 
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>Phone Number</Text>
+          <Text style={styles.label}>{t('contactForm.phoneNumber')}</Text>
           <View style={styles.phoneInputContainer}>
             <TouchableOpacity
               style={styles.countrySelector}
@@ -120,7 +122,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
               style={styles.phoneInput}
               value={phoneNumber}
               onChangeText={setPhoneNumber}
-              placeholder="Phone number"
+              placeholder={t('contactForm.phonePlaceholder')}
               placeholderTextColor="#9CA3AF"
               keyboardType="phone-pad"
             />
@@ -132,14 +134,14 @@ export const ContactForm: React.FC<ContactFormProps> = ({
             style={[styles.button, styles.cancelButton]}
             onPress={onCancel}
             disabled={loading}>
-            <Text style={styles.cancelButtonText}>Cancel</Text>
+            <Text style={styles.cancelButtonText}>{t('common.cancel')}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.button, styles.submitButton, loading && styles.buttonDisabled]}
             onPress={handleSubmit}
             disabled={loading}>
             <Text style={styles.submitButtonText}>
-              {loading ? 'Saving...' : isEditing ? 'Save' : 'Add Contact'}
+              {loading ? t('common.saving') : isEditing ? t('common.save') : t('contactForm.addContact')}
             </Text>
           </TouchableOpacity>
         </View>
@@ -151,9 +153,9 @@ export const ContactForm: React.FC<ContactFormProps> = ({
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Select Country</Text>
+              <Text style={styles.modalTitle}>{t('contactForm.selectCountry')}</Text>
               <TouchableOpacity onPress={() => setShowCountryPicker(false)}>
-                <Text style={styles.modalClose}>Close</Text>
+                <Text style={styles.modalClose}>{t('common.close')}</Text>
               </TouchableOpacity>
             </View>
             <FlatList

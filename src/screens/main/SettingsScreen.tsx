@@ -11,6 +11,7 @@ import {
   Linking,
   Platform,
 } from 'react-native';
+import {useTranslation} from 'react-i18next';
 import {useAuth} from '../../hooks/useAuth';
 import {updateUserProfile} from '../../api/supabase';
 import {ThresholdPicker, TimePicker} from '../../components';
@@ -21,6 +22,7 @@ import {
 } from '../../types';
 
 export const SettingsScreen: React.FC = () => {
+  const {t} = useTranslation();
   const {userProfile, authUser, signOut, refreshProfile} = useAuth();
 
   const [inactivityThreshold, setInactivityThreshold] = useState(
@@ -95,13 +97,13 @@ export const SettingsScreen: React.FC = () => {
       });
 
       if (error) {
-        Alert.alert('Error', 'Failed to save settings');
+        Alert.alert(t('common.error'), t('settings.failedToSave'));
         return;
       }
 
       await refreshProfile();
       setHasChanges(false);
-      Alert.alert('Success', 'Settings saved successfully');
+      Alert.alert(t('settings.success'), t('settings.settingsSaved'));
     } finally {
       setSaving(false);
     }
@@ -109,12 +111,12 @@ export const SettingsScreen: React.FC = () => {
 
   const handleSignOut = () => {
     Alert.alert(
-      'Sign Out',
-      'Are you sure you want to sign out? Your monitoring will be paused.',
+      t('settings.signOut'),
+      t('settings.signOutConfirm'),
       [
-        {text: 'Cancel', style: 'cancel'},
+        {text: t('common.cancel'), style: 'cancel'},
         {
-          text: 'Sign Out',
+          text: t('settings.signOut'),
           style: 'destructive',
           onPress: signOut,
         },
@@ -126,16 +128,16 @@ export const SettingsScreen: React.FC = () => {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.header}>
-          <Text style={styles.title}>Settings</Text>
+          <Text style={styles.title}>{t('settings.title')}</Text>
         </View>
 
         {/* Monitoring Toggle */}
         <View style={styles.section}>
           <View style={styles.toggleRow}>
             <View style={styles.toggleInfo}>
-              <Text style={styles.toggleTitle}>Monitoring Active</Text>
+              <Text style={styles.toggleTitle}>{t('settings.monitoringActive')}</Text>
               <Text style={styles.toggleDescription}>
-                When disabled, no alerts will be sent
+                {t('settings.monitoringDisabledDesc')}
               </Text>
             </View>
             <Switch
@@ -149,19 +151,19 @@ export const SettingsScreen: React.FC = () => {
 
         {/* Alert Timing */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Alert Timing</Text>
+          <Text style={styles.sectionTitle}>{t('settings.alertTiming')}</Text>
 
           <ThresholdPicker
-            label="Inactivity Threshold"
-            description="How long before your contacts are alerted"
+            label={t('settings.inactivityThreshold')}
+            description={t('settings.inactivityThresholdDesc')}
             options={INACTIVITY_THRESHOLDS}
             selectedValue={inactivityThreshold}
             onSelect={setInactivityThreshold}
           />
 
           <ThresholdPicker
-            label="Grace Period"
-            description="Time to respond after receiving a warning"
+            label={t('settings.gracePeriod')}
+            description={t('settings.gracePeriodDesc')}
             options={GRACE_PERIODS}
             selectedValue={gracePeriod}
             onSelect={setGracePeriod}
@@ -170,36 +172,36 @@ export const SettingsScreen: React.FC = () => {
 
         {/* Reminder Settings */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Reminders</Text>
+          <Text style={styles.sectionTitle}>{t('settings.reminders')}</Text>
 
           <ThresholdPicker
-            label="Reminder Frequency"
-            description="How often to remind you to check in"
+            label={t('settings.reminderFrequency')}
+            description={t('settings.reminderFrequencyDesc')}
             options={REMINDER_FREQUENCIES}
             selectedValue={reminderFrequency}
             onSelect={setReminderFrequency}
           />
 
-          <Text style={styles.subsectionTitle}>Quiet Hours</Text>
+          <Text style={styles.subsectionTitle}>{t('settings.quietHours')}</Text>
           <Text style={styles.subsectionDescription}>
-            No reminders during these hours (alerts still trigger)
+            {t('settings.quietHoursDesc')}
           </Text>
 
           <View style={styles.timePickerRow}>
             <View style={styles.timePickerContainer}>
               <TimePicker
-                label="Start"
+                label={t('settings.start')}
                 value={sleepStart}
                 onSelect={setSleepStart}
-                placeholder="e.g., 11 PM"
+                placeholder={t('settings.startPlaceholder')}
               />
             </View>
             <View style={styles.timePickerContainer}>
               <TimePicker
-                label="End"
+                label={t('settings.end')}
                 value={sleepEnd}
                 onSelect={setSleepEnd}
-                placeholder="e.g., 7 AM"
+                placeholder={t('settings.endPlaceholder')}
               />
             </View>
           </View>
@@ -211,7 +213,7 @@ export const SettingsScreen: React.FC = () => {
                 setSleepStart(null);
                 setSleepEnd(null);
               }}>
-              <Text style={styles.clearButtonText}>Clear Quiet Hours</Text>
+              <Text style={styles.clearButtonText}>{t('settings.clearQuietHours')}</Text>
             </TouchableOpacity>
           )}
         </View>
@@ -223,17 +225,17 @@ export const SettingsScreen: React.FC = () => {
             onPress={handleSave}
             disabled={saving}>
             <Text style={styles.saveButtonText}>
-              {saving ? 'Saving...' : 'Save Changes'}
+              {saving ? t('common.saving') : t('settings.saveChanges')}
             </Text>
           </TouchableOpacity>
         )}
 
         {/* Account Section */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Account</Text>
+          <Text style={styles.sectionTitle}>{t('settings.account')}</Text>
 
           <View style={styles.accountInfo}>
-            <Text style={styles.accountLabel}>Email</Text>
+            <Text style={styles.accountLabel}>{t('settings.email')}</Text>
             <Text style={styles.accountValue}>{authUser?.email}</Text>
           </View>
 
@@ -248,17 +250,17 @@ export const SettingsScreen: React.FC = () => {
                 Linking.openURL(url);
               }
             }}>
-            <Text style={styles.manageSubscriptionText}>Manage Subscription</Text>
+            <Text style={styles.manageSubscriptionText}>{t('settings.manageSubscription')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.signOutButton} onPress={handleSignOut}>
-            <Text style={styles.signOutButtonText}>Sign Out</Text>
+            <Text style={styles.signOutButtonText}>{t('settings.signOut')}</Text>
           </TouchableOpacity>
         </View>
 
         {/* Version Info */}
         <View style={styles.footer}>
-          <Text style={styles.version}>JustInCase v1.0.1</Text>
+          <Text style={styles.version}>{t('settings.version', {version: '1.0.1'})}</Text>
         </View>
       </ScrollView>
     </SafeAreaView>

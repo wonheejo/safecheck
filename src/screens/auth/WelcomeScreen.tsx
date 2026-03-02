@@ -9,6 +9,7 @@ import {
   Alert,
 } from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {useTranslation} from 'react-i18next';
 import {AuthStackParamList} from '../../navigation/types';
 import {useAuth} from '../../hooks/useAuth';
 
@@ -17,6 +18,7 @@ type WelcomeScreenProps = {
 };
 
 export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({navigation}) => {
+  const {t} = useTranslation();
   const {signInWithGoogle, signInWithApple, loading} = useAuth();
   const [googleLoading, setGoogleLoading] = useState(false);
   const [appleLoading, setAppleLoading] = useState(false);
@@ -26,10 +28,10 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({navigation}) => {
     try {
       const {error} = await signInWithGoogle();
       if (error) {
-        Alert.alert('Sign In Failed', error.message);
+        Alert.alert(t('welcome.signInFailed'), error.message);
       }
     } catch (e: any) {
-      Alert.alert('Sign In Failed', e.message || 'Something went wrong');
+      Alert.alert(t('welcome.signInFailed'), e.message || t('common.somethingWentWrong'));
     } finally {
       setGoogleLoading(false);
     }
@@ -40,10 +42,10 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({navigation}) => {
     try {
       const {error} = await signInWithApple();
       if (error) {
-        Alert.alert('Sign In Failed', error.message);
+        Alert.alert(t('welcome.signInFailed'), error.message);
       }
     } catch (e: any) {
-      Alert.alert('Sign In Failed', e.message || 'Something went wrong');
+      Alert.alert(t('welcome.signInFailed'), e.message || t('common.somethingWentWrong'));
     } finally {
       setAppleLoading(false);
     }
@@ -58,7 +60,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({navigation}) => {
           </View>
           <Text style={styles.title}>JustInCase</Text>
           <Text style={styles.subtitle}>
-            Peace of mind for you and your loved ones
+            {t('welcome.subtitle')}
           </Text>
         </View>
 
@@ -66,9 +68,9 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({navigation}) => {
           <View style={styles.featureItem}>
             <Text style={styles.featureIcon}>*</Text>
             <View style={styles.featureText}>
-              <Text style={styles.featureTitle}>Stay Connected</Text>
+              <Text style={styles.featureTitle}>{t('welcome.stayConnected')}</Text>
               <Text style={styles.featureDesc}>
-                Regular check-ins let your contacts know you're safe
+                {t('welcome.stayConnectedDesc')}
               </Text>
             </View>
           </View>
@@ -76,9 +78,9 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({navigation}) => {
           <View style={styles.featureItem}>
             <Text style={styles.featureIcon}>!</Text>
             <View style={styles.featureText}>
-              <Text style={styles.featureTitle}>Automatic Alerts</Text>
+              <Text style={styles.featureTitle}>{t('welcome.automaticAlerts')}</Text>
               <Text style={styles.featureDesc}>
-                Trusted contacts are notified if you don't check in
+                {t('welcome.automaticAlertsDesc')}
               </Text>
             </View>
           </View>
@@ -86,9 +88,9 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({navigation}) => {
           <View style={styles.featureItem}>
             <Text style={styles.featureIcon}>~</Text>
             <View style={styles.featureText}>
-              <Text style={styles.featureTitle}>Simple & Private</Text>
+              <Text style={styles.featureTitle}>{t('welcome.simplePrivate')}</Text>
               <Text style={styles.featureDesc}>
-                Just one tap to confirm you're okay
+                {t('welcome.simplePrivateDesc')}
               </Text>
             </View>
           </View>
@@ -101,7 +103,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({navigation}) => {
               onPress={handleAppleSignIn}
               disabled={loading || appleLoading}>
               <Text style={styles.appleButtonText}>
-                {appleLoading ? 'Signing in...' : '\uF8FF Sign in with Apple'}
+                {appleLoading ? t('common.signingIn') : t('welcome.signInWithApple')}
               </Text>
             </TouchableOpacity>
           )}
@@ -111,20 +113,20 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({navigation}) => {
             onPress={handleGoogleSignIn}
             disabled={loading || googleLoading}>
             <Text style={styles.googleButtonText}>
-              {googleLoading ? 'Signing in...' : 'Continue with Google'}
+              {googleLoading ? t('common.signingIn') : t('welcome.continueWithGoogle')}
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.emailButton}
             onPress={() => navigation.navigate('SignUp')}>
-            <Text style={styles.emailButtonText}>Sign up with Email</Text>
+            <Text style={styles.emailButtonText}>{t('welcome.signUpWithEmail')}</Text>
           </TouchableOpacity>
 
           <View style={styles.signinContainer}>
-            <Text style={styles.signinText}>Already have an account? </Text>
+            <Text style={styles.signinText}>{t('welcome.alreadyHaveAccount')}</Text>
             <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
-              <Text style={styles.signinLink}>Sign In</Text>
+              <Text style={styles.signinLink}>{t('welcome.signIn')}</Text>
             </TouchableOpacity>
           </View>
         </View>

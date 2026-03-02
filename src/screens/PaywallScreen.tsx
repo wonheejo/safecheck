@@ -9,9 +9,11 @@ import {
   Linking,
   ActivityIndicator,
 } from 'react-native';
+import {useTranslation} from 'react-i18next';
 import {useSubscription} from '../hooks/useSubscription';
 
 export const PaywallScreen: React.FC = () => {
+  const {t} = useTranslation();
   const {purchase, restore, error, isLoading} = useSubscription();
   const [purchasing, setPurchasing] = useState(false);
   const [restoring, setRestoring] = useState(false);
@@ -21,7 +23,7 @@ export const PaywallScreen: React.FC = () => {
     try {
       await purchase();
     } catch {
-      Alert.alert('Error', 'Something went wrong. Please try again.');
+      Alert.alert(t('common.error'), t('paywall.purchaseError'));
     } finally {
       setPurchasing(false);
     }
@@ -32,7 +34,7 @@ export const PaywallScreen: React.FC = () => {
     try {
       await restore();
     } catch {
-      Alert.alert('Error', 'Could not restore purchases. Please try again.');
+      Alert.alert(t('common.error'), t('paywall.restoreError'));
     } finally {
       setRestoring(false);
     }
@@ -50,9 +52,9 @@ export const PaywallScreen: React.FC = () => {
           <View style={styles.logoContainer}>
             <Text style={styles.logo}>JIC</Text>
           </View>
-          <Text style={styles.title}>JustInCase Premium</Text>
+          <Text style={styles.title}>{t('paywall.title')}</Text>
           <Text style={styles.subtitle}>
-            Keep your loved ones informed with automatic safety check-ins
+            {t('paywall.subtitle')}
           </Text>
         </View>
 
@@ -60,9 +62,9 @@ export const PaywallScreen: React.FC = () => {
           <View style={styles.featureItem}>
             <Text style={styles.featureIcon}>*</Text>
             <View style={styles.featureText}>
-              <Text style={styles.featureTitle}>Automatic Monitoring</Text>
+              <Text style={styles.featureTitle}>{t('paywall.automaticMonitoring')}</Text>
               <Text style={styles.featureDesc}>
-                24/7 inactivity detection with customizable thresholds
+                {t('paywall.automaticMonitoringDesc')}
               </Text>
             </View>
           </View>
@@ -70,9 +72,9 @@ export const PaywallScreen: React.FC = () => {
           <View style={styles.featureItem}>
             <Text style={styles.featureIcon}>!</Text>
             <View style={styles.featureText}>
-              <Text style={styles.featureTitle}>SMS Alerts</Text>
+              <Text style={styles.featureTitle}>{t('paywall.smsAlerts')}</Text>
               <Text style={styles.featureDesc}>
-                Your trusted contacts are notified via SMS if you don't check in
+                {t('paywall.smsAlertsDesc')}
               </Text>
             </View>
           </View>
@@ -80,16 +82,16 @@ export const PaywallScreen: React.FC = () => {
           <View style={styles.featureItem}>
             <Text style={styles.featureIcon}>~</Text>
             <View style={styles.featureText}>
-              <Text style={styles.featureTitle}>Up to 3 Contacts</Text>
+              <Text style={styles.featureTitle}>{t('paywall.upTo3Contacts')}</Text>
               <Text style={styles.featureDesc}>
-                Add trusted contacts across 8 supported countries
+                {t('paywall.upTo3ContactsDesc')}
               </Text>
             </View>
           </View>
         </View>
 
         <View style={styles.bottom}>
-          <Text style={styles.price}>₩5,000 / month</Text>
+          <Text style={styles.price}>{t('paywall.price')}</Text>
 
           <TouchableOpacity
             style={[styles.subscribeButton, (purchasing || isLoading) && styles.buttonDisabled]}
@@ -98,7 +100,7 @@ export const PaywallScreen: React.FC = () => {
             {purchasing ? (
               <ActivityIndicator color="#FFFFFF" />
             ) : (
-              <Text style={styles.subscribeButtonText}>Subscribe Now</Text>
+              <Text style={styles.subscribeButtonText}>{t('paywall.subscribe')}</Text>
             )}
           </TouchableOpacity>
 
@@ -107,16 +109,12 @@ export const PaywallScreen: React.FC = () => {
             onPress={handleRestore}
             disabled={restoring || isLoading}>
             <Text style={styles.restoreButtonText}>
-              {restoring ? 'Restoring...' : 'Restore Purchase'}
+              {restoring ? t('paywall.restoring') : t('paywall.restorePurchase')}
             </Text>
           </TouchableOpacity>
 
           <Text style={styles.terms}>
-            Payment will be charged to your Apple ID account at confirmation of
-            purchase. Subscription automatically renews unless it is canceled at
-            least 24 hours before the end of the current period. Your account
-            will be charged for renewal within 24 hours prior to the end of the
-            current period.
+            {t('paywall.subscriptionTerms')}
           </Text>
 
           <View style={styles.links}>
@@ -126,7 +124,7 @@ export const PaywallScreen: React.FC = () => {
                   'https://wonheejo.github.io/safecheck/terms-of-service.html',
                 )
               }>
-              <Text style={styles.linkText}>Terms of Service</Text>
+              <Text style={styles.linkText}>{t('paywall.termsOfService')}</Text>
             </TouchableOpacity>
             <Text style={styles.linkSeparator}>|</Text>
             <TouchableOpacity
@@ -135,7 +133,7 @@ export const PaywallScreen: React.FC = () => {
                   'https://wonheejo.github.io/safecheck/privacy-policy.html',
                 )
               }>
-              <Text style={styles.linkText}>Privacy Policy</Text>
+              <Text style={styles.linkText}>{t('paywall.privacyPolicy')}</Text>
             </TouchableOpacity>
           </View>
         </View>

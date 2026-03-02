@@ -1,9 +1,10 @@
 import React from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {useTranslation} from 'react-i18next';
 
 interface Option<T> {
   value: T;
-  label: string;
+  labelKey: string;
 }
 
 interface ThresholdPickerProps<T extends number | string> {
@@ -21,6 +22,8 @@ export function ThresholdPicker<T extends number | string>({
   onSelect,
   description,
 }: ThresholdPickerProps<T>) {
+  const {t} = useTranslation();
+
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
@@ -39,7 +42,7 @@ export function ThresholdPicker<T extends number | string>({
                 styles.optionText,
                 selectedValue === option.value && styles.optionTextSelected,
               ]}>
-              {option.label}
+              {t(option.labelKey)}
             </Text>
           </TouchableOpacity>
         ))}

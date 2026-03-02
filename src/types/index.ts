@@ -66,26 +66,26 @@ export const COUNTRIES: Country[] = [
 ];
 
 export const INACTIVITY_THRESHOLDS = [
-  {value: 24, label: '24 hours'},
-  {value: 48, label: '48 hours'},
-  {value: 72, label: '72 hours'},
+  {value: 24, labelKey: 'time.24hours'},
+  {value: 48, labelKey: 'time.48hours'},
+  {value: 72, labelKey: 'time.72hours'},
 ];
 
 export const GRACE_PERIODS = [
-  {value: 1, label: '1 hour'},
-  {value: 2, label: '2 hours'},
-  {value: 4, label: '4 hours'},
+  {value: 1, labelKey: 'time.1hour'},
+  {value: 2, labelKey: 'time.2hours'},
+  {value: 4, labelKey: 'time.4hours'},
 ];
 
 export const REMINDER_FREQUENCIES = [
-  {value: 1, label: 'Every 1 hour'},
-  {value: 2, label: 'Every 2 hours'},
-  {value: 4, label: 'Every 4 hours'},
-  {value: 6, label: 'Every 6 hours'},
-  {value: 12, label: 'Every 12 hours'},
+  {value: 1, labelKey: 'time.every1hour'},
+  {value: 2, labelKey: 'time.every2hours'},
+  {value: 4, labelKey: 'time.every4hours'},
+  {value: 6, labelKey: 'time.every6hours'},
+  {value: 12, labelKey: 'time.every12hours'},
 ];
 
 export const SNOOZE_OPTIONS = [
-  {value: 30, label: '30 minutes'},
-  {value: 60, label: '1 hour'},
+  {value: 30, labelKey: 'time.30minutes'},
+  {value: 60, labelKey: 'time.1hour'},
 ];

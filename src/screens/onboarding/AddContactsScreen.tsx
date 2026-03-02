@@ -13,6 +13,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
+import {useTranslation} from 'react-i18next';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {OnboardingStackParamList} from '../../navigation/types';
 import {useAuth} from '../../hooks/useAuth';
@@ -28,6 +29,7 @@ type AddContactsScreenProps = {
 export const AddContactsScreen: React.FC<AddContactsScreenProps> = ({
   navigation,
 }) => {
+  const {t} = useTranslation();
   const {authUser} = useAuth();
   const {contacts, addContact, removeContact, canAddMore, maxContacts} =
     useContacts(authUser?.id);
@@ -44,7 +46,7 @@ export const AddContactsScreen: React.FC<AddContactsScreenProps> = ({
     try {
       const result = await addContact(name, phoneNumber, countryCode);
       if (result.error) {
-        Alert.alert('Error', result.error);
+        Alert.alert(t('common.error'), result.error);
         return;
       }
       setShowForm(false);
@@ -54,10 +56,10 @@ export const AddContactsScreen: React.FC<AddContactsScreenProps> = ({
   };
 
   const handleRemoveContact = (contact: TrustedContact) => {
-    Alert.alert('Remove Contact', `Remove ${contact.name}?`, [
-      {text: 'Cancel', style: 'cancel'},
+    Alert.alert(t('contacts.removeContact'), t('contacts.removeContactShort', {name: contact.name}), [
+      {text: t('common.cancel'), style: 'cancel'},
       {
-        text: 'Remove',
+        text: t('common.remove'),
         style: 'destructive',
         onPress: () => removeContact(contact.id),
       },
@@ -67,9 +69,9 @@ export const AddContactsScreen: React.FC<AddContactsScreenProps> = ({
   const handleContinue = () => {
     if (contacts.length === 0) {
       Alert.alert(
-        'No Contacts Added',
-        'You need at least one trusted contact to continue. They will be notified if you don\'t check in.',
-        [{text: 'OK'}],
+        t('onboarding.noContactsAdded'),
+        t('onboarding.noContactsAddedDesc'),
+        [{text: t('common.ok')}],
       );
       return;
     }
@@ -78,12 +80,12 @@ export const AddContactsScreen: React.FC<AddContactsScreenProps> = ({
 
   const handleSkip = () => {
     Alert.alert(
-      'Skip Adding Contacts?',
-      'Without trusted contacts, JustInCase cannot alert anyone if you don\'t check in. Are you sure?',
+      t('onboarding.skipAddingContacts'),
+      t('onboarding.skipAddingContactsDesc'),
       [
-        {text: 'Go Back', style: 'cancel'},
+        {text: t('onboarding.goBack'), style: 'cancel'},
         {
-          text: 'Skip Anyway',
+          text: t('onboarding.skipAnyway'),
           onPress: () => navigation.navigate('SetThreshold'),
         },
       ],
@@ -117,19 +119,18 @@ export const AddContactsScreen: React.FC<AddContactsScreenProps> = ({
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
         <View style={styles.header}>
-          <Text style={styles.step}>Step 1 of 3</Text>
-          <Text style={styles.title}>Add Trusted Contacts</Text>
+          <Text style={styles.step}>{t('onboarding.step1of3')}</Text>
+          <Text style={styles.title}>{t('onboarding.addContacts')}</Text>
           <Text style={styles.subtitle}>
-            These people will be notified via SMS if you don't check in within
-            your configured time window.
+            {t('onboarding.addContactsDesc')}
           </Text>
         </View>
 
         <View style={styles.contactsSection}>
           <View style={styles.contactsHeader}>
-            <Text style={styles.contactsTitle}>Your Contacts</Text>
+            <Text style={styles.contactsTitle}>{t('contacts.yourContacts')}</Text>
             <Text style={styles.contactsCount}>
-              {contacts.length}/{maxContacts}
+              {t('contacts.contactCount', {count: contacts.length, max: maxContacts})}
             </Text>
           </View>
 
@@ -143,7 +144,7 @@ export const AddContactsScreen: React.FC<AddContactsScreenProps> = ({
             />
           ) : (
             <View style={styles.emptyState}>
-              <Text style={styles.emptyText}>No contacts added yet</Text>
+              <Text style={styles.emptyText}>{t('contacts.noContactsAdded')}</Text>
             </View>
           )}
 
@@ -151,14 +152,14 @@ export const AddContactsScreen: React.FC<AddContactsScreenProps> = ({
             <TouchableOpacity
               style={styles.addButton}
               onPress={() => setShowForm(true)}>
-              <Text style={styles.addButtonText}>+ Add Contact</Text>
+              <Text style={styles.addButtonText}>{t('contacts.addContact')}</Text>
             </TouchableOpacity>
           )}
         </View>
 
         <View style={styles.footer}>
           <TouchableOpacity style={styles.skipButton} onPress={handleSkip}>
-            <Text style={styles.skipButtonText}>Skip for now</Text>
+            <Text style={styles.skipButtonText}>{t('onboarding.skipForNow')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -167,7 +168,7 @@ export const AddContactsScreen: React.FC<AddContactsScreenProps> = ({
               contacts.length === 0 && styles.continueButtonDisabled,
             ]}
             onPress={handleContinue}>
-            <Text style={styles.continueButtonText}>Continue</Text>
+            <Text style={styles.continueButtonText}>{t('common.continue')}</Text>
           </TouchableOpacity>
         </View>
       </View>

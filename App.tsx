@@ -1,3 +1,4 @@
+import './src/i18n';
 import React, {useEffect, useState} from 'react';
 import {StatusBar, LogBox, Linking} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';

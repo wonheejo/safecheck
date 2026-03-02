@@ -8,6 +8,7 @@ import {
   ScrollView,
 } from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {useTranslation} from 'react-i18next';
 import {AuthStackParamList} from '../../navigation/types';
 
 type ConsentScreenProps = {
@@ -15,6 +16,7 @@ type ConsentScreenProps = {
 };
 
 export const ConsentScreen: React.FC<ConsentScreenProps> = ({navigation}) => {
+  const {t} = useTranslation();
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [acceptedPrivacy, setAcceptedPrivacy] = useState(false);
 
@@ -31,41 +33,38 @@ export const ConsentScreen: React.FC<ConsentScreenProps> = ({navigation}) => {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.header}>
-          <Text style={styles.title}>Before We Start</Text>
+          <Text style={styles.title}>{t('consent.title')}</Text>
           <Text style={styles.subtitle}>
-            Please review and accept the following to continue
+            {t('consent.subtitle')}
           </Text>
         </View>
 
         <View style={styles.content}>
           <View style={styles.infoCard}>
-            <Text style={styles.infoTitle}>How JustInCase Works</Text>
+            <Text style={styles.infoTitle}>{t('consent.howItWorks')}</Text>
             <Text style={styles.infoText}>
-              JustInCase monitors your check-ins and alerts your trusted contacts
-              if you don't respond within your configured time window. This
-              service is designed to provide peace of mind for you and your
-              loved ones.
+              {t('consent.howItWorksDesc')}
             </Text>
           </View>
 
           <View style={styles.infoCard}>
-            <Text style={styles.infoTitle}>What We Need</Text>
+            <Text style={styles.infoTitle}>{t('consent.whatWeNeed')}</Text>
             <View style={styles.listItem}>
               <Text style={styles.bullet}>-</Text>
               <Text style={styles.listText}>
-                Permission to send you push notifications
+                {t('consent.needNotifications')}
               </Text>
             </View>
             <View style={styles.listItem}>
               <Text style={styles.bullet}>-</Text>
               <Text style={styles.listText}>
-                Phone numbers of your trusted contacts
+                {t('consent.needPhoneNumbers')}
               </Text>
             </View>
             <View style={styles.listItem}>
               <Text style={styles.bullet}>-</Text>
               <Text style={styles.listText}>
-                Your consent to send SMS alerts on your behalf
+                {t('consent.needSmsConsent')}
               </Text>
             </View>
           </View>
@@ -79,11 +78,11 @@ export const ConsentScreen: React.FC<ConsentScreenProps> = ({navigation}) => {
               </View>
             </TouchableOpacity>
             <Text style={styles.checkboxLabel}>
-              I agree to the{' '}
+              {t('consent.agreeToTerms')}
               <Text
                 style={styles.link}
                 onPress={() => navigation.navigate('TermsOfService')}>
-                Terms of Service
+                {t('consent.termsOfService')}
               </Text>
             </Text>
           </View>
@@ -97,14 +96,13 @@ export const ConsentScreen: React.FC<ConsentScreenProps> = ({navigation}) => {
               </View>
             </TouchableOpacity>
             <Text style={styles.checkboxLabel}>
-              I agree to the{' '}
+              {t('consent.agreeToPrivacy')}
               <Text
                 style={styles.link}
                 onPress={() => navigation.navigate('PrivacyPolicy')}>
-                Privacy Policy
+                {t('consent.privacyPolicy')}
               </Text>
-              {' '}and consent to JustInCase sending SMS messages to my trusted
-              contacts on my behalf
+              {t('consent.privacySmsConsent')}
             </Text>
           </View>
         </View>
@@ -114,7 +112,7 @@ export const ConsentScreen: React.FC<ConsentScreenProps> = ({navigation}) => {
             style={[styles.button, !canContinue && styles.buttonDisabled]}
             onPress={handleContinue}
             disabled={!canContinue}>
-            <Text style={styles.buttonText}>Continue to Setup</Text>
+            <Text style={styles.buttonText}>{t('consent.continueToSetup')}</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

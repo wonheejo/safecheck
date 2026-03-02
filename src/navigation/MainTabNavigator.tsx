@@ -1,6 +1,7 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Text, StyleSheet} from 'react-native';
+import {useTranslation} from 'react-i18next';
 import {MainTabParamList} from './types';
 import {
   HomeScreen,
@@ -27,6 +28,8 @@ const TabIcon = ({name, focused}: {name: string; focused: boolean}) => {
 };
 
 export const MainTabNavigator: React.FC = () => {
+  const {t} = useTranslation();
+
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
@@ -40,22 +43,22 @@ export const MainTabNavigator: React.FC = () => {
       <Tab.Screen
         name="Home"
         component={HomeScreen}
-        options={{tabBarLabel: 'Home'}}
+        options={{tabBarLabel: t('tabs.home')}}
       />
       <Tab.Screen
         name="Contacts"
         component={ContactsScreen}
-        options={{tabBarLabel: 'Contacts'}}
+        options={{tabBarLabel: t('tabs.contacts')}}
       />
       <Tab.Screen
         name="History"
         component={AlertHistoryScreen}
-        options={{tabBarLabel: 'History'}}
+        options={{tabBarLabel: t('tabs.history')}}
       />
       <Tab.Screen
         name="Settings"
         component={SettingsScreen}
-        options={{tabBarLabel: 'Settings'}}
+        options={{tabBarLabel: t('tabs.settings')}}
       />
     </Tab.Navigator>
   );

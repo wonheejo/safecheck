@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   Alert,
 } from 'react-native';
+import {useTranslation} from 'react-i18next';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {OnboardingStackParamList} from '../../navigation/types';
 import {useAuth} from '../../hooks/useAuth';
@@ -18,6 +19,7 @@ type TestAlertScreenProps = {
 };
 
 export const TestAlertScreen: React.FC<TestAlertScreenProps> = ({navigation}) => {
+  const {t} = useTranslation();
   const {authUser, userProfile} = useAuth();
   const {contacts} = useContacts(authUser?.id);
   const [notificationGranted, setNotificationGranted] = useState<boolean | null>(null);
@@ -35,8 +37,8 @@ export const TestAlertScreen: React.FC<TestAlertScreenProps> = ({navigation}) =>
 
       if (!granted) {
         Alert.alert(
-          'Notifications Required',
-          'JustInCase needs notifications to remind you to check in and warn you before alerting your contacts. Please enable notifications in Settings.',
+          t('onboarding.notificationsRequired'),
+          t('onboarding.notificationsRequiredDesc'),
         );
       }
     } finally {
@@ -47,11 +49,11 @@ export const TestAlertScreen: React.FC<TestAlertScreenProps> = ({navigation}) =>
   const handleComplete = () => {
     if (notificationGranted === false) {
       Alert.alert(
-        'Notifications Disabled',
-        'Without notifications, you may miss important reminders and warnings. Are you sure you want to continue?',
+        t('onboarding.notificationsDisabled'),
+        t('onboarding.notificationsDisabledDesc'),
         [
-          {text: 'Enable Notifications', onPress: handleEnableNotifications},
-          {text: 'Continue Anyway', style: 'destructive', onPress: finishOnboarding},
+          {text: t('onboarding.enableNotifications'), onPress: handleEnableNotifications},
+          {text: t('onboarding.continueAnyway'), style: 'destructive', onPress: finishOnboarding},
         ],
       );
       return;
@@ -63,9 +65,9 @@ export const TestAlertScreen: React.FC<TestAlertScreenProps> = ({navigation}) =>
     // Navigation will be handled by the root navigator checking onboarding status
     // For now, we'll just show a success message
     Alert.alert(
-      'Setup Complete!',
-      'JustInCase is now monitoring your activity. Remember to check in regularly!',
-      [{text: 'OK'}],
+      t('onboarding.setupComplete'),
+      t('onboarding.setupCompleteDesc'),
+      [{text: t('common.ok')}],
     );
   };
 
@@ -76,12 +78,12 @@ export const TestAlertScreen: React.FC<TestAlertScreenProps> = ({navigation}) =>
           <TouchableOpacity
             style={styles.backButton}
             onPress={() => navigation.goBack()}>
-            <Text style={styles.backButtonText}>{'<'} Back</Text>
+            <Text style={styles.backButtonText}>{t('common.back')}</Text>
           </TouchableOpacity>
-          <Text style={styles.step}>Step 3 of 3</Text>
-          <Text style={styles.title}>Almost Done!</Text>
+          <Text style={styles.step}>{t('onboarding.step3of3')}</Text>
+          <Text style={styles.title}>{t('onboarding.almostDone')}</Text>
           <Text style={styles.subtitle}>
-            Let's make sure everything is set up correctly.
+            {t('onboarding.almostDoneDesc')}
           </Text>
         </View>
 
@@ -95,11 +97,11 @@ export const TestAlertScreen: React.FC<TestAlertScreenProps> = ({navigation}) =>
               {contacts.length > 0 && <Text style={styles.checkMark}>v</Text>}
             </View>
             <View style={styles.checkContent}>
-              <Text style={styles.checkTitle}>Trusted Contacts</Text>
+              <Text style={styles.checkTitle}>{t('onboarding.trustedContacts')}</Text>
               <Text style={styles.checkDescription}>
                 {contacts.length > 0
-                  ? `${contacts.length} contact${contacts.length > 1 ? 's' : ''} added`
-                  : 'No contacts added'}
+                  ? t('onboarding.contactsAdded', {count: contacts.length})
+                  : t('onboarding.noContactsAddedShort')}
               </Text>
             </View>
           </View>
@@ -115,10 +117,9 @@ export const TestAlertScreen: React.FC<TestAlertScreenProps> = ({navigation}) =>
               )}
             </View>
             <View style={styles.checkContent}>
-              <Text style={styles.checkTitle}>Alert Settings</Text>
+              <Text style={styles.checkTitle}>{t('onboarding.alertSettings')}</Text>
               <Text style={styles.checkDescription}>
-                {userProfile?.inactivity_threshold_hours}h threshold,{' '}
-                {userProfile?.grace_period_hours}h grace period
+                {t('onboarding.alertSettingsDesc', {threshold: userProfile?.inactivity_threshold_hours, grace: userProfile?.grace_period_hours})}
               </Text>
             </View>
           </View>
@@ -132,13 +133,13 @@ export const TestAlertScreen: React.FC<TestAlertScreenProps> = ({navigation}) =>
               {notificationGranted && <Text style={styles.checkMark}>v</Text>}
             </View>
             <View style={styles.checkContent}>
-              <Text style={styles.checkTitle}>Push Notifications</Text>
+              <Text style={styles.checkTitle}>{t('onboarding.pushNotifications')}</Text>
               <Text style={styles.checkDescription}>
                 {notificationGranted === null
-                  ? 'Not configured yet'
+                  ? t('onboarding.notConfigured')
                   : notificationGranted
-                  ? 'Enabled'
-                  : 'Disabled'}
+                  ? t('onboarding.enabled')
+                  : t('onboarding.disabled')}
               </Text>
             </View>
             {notificationGranted !== true && (
@@ -147,7 +148,7 @@ export const TestAlertScreen: React.FC<TestAlertScreenProps> = ({navigation}) =>
                 onPress={handleEnableNotifications}
                 disabled={registering}>
                 <Text style={styles.enableButtonText}>
-                  {registering ? 'Enabling...' : 'Enable'}
+                  {registering ? t('onboarding.enabling') : t('common.enable')}
                 </Text>
               </TouchableOpacity>
             )}
@@ -155,11 +156,9 @@ export const TestAlertScreen: React.FC<TestAlertScreenProps> = ({navigation}) =>
         </View>
 
         <View style={styles.infoCard}>
-          <Text style={styles.infoTitle}>What happens next?</Text>
+          <Text style={styles.infoTitle}>{t('onboarding.whatHappensNext')}</Text>
           <Text style={styles.infoText}>
-            1. You'll receive reminder notifications to check in{'\n'}
-            2. If you miss check-ins past your threshold, we send a warning{'\n'}
-            3. If you don't respond to the warning, your contacts get an SMS
+            {t('onboarding.whatHappensNextDesc')}
           </Text>
         </View>
 
@@ -167,7 +166,7 @@ export const TestAlertScreen: React.FC<TestAlertScreenProps> = ({navigation}) =>
           <TouchableOpacity
             style={styles.completeButton}
             onPress={handleComplete}>
-            <Text style={styles.completeButtonText}>Start Using JustInCase</Text>
+            <Text style={styles.completeButtonText}>{t('onboarding.startUsing')}</Text>
           </TouchableOpacity>
         </View>
       </View>

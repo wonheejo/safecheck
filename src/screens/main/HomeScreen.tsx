@@ -1,5 +1,6 @@
 import React, {useEffect, useCallback} from 'react';
 import {View, Text, StyleSheet, SafeAreaView} from 'react-native';
+import {useTranslation} from 'react-i18next';
 import {useFocusEffect} from '@react-navigation/native';
 import {CheckInButton} from '../../components';
 import {useAuth} from '../../hooks/useAuth';
@@ -7,6 +8,7 @@ import {useCheckIn} from '../../hooks/useCheckIn';
 import {registerFcmToken, setupNotificationListeners, setNotificationHandler} from '../../services/notifications';
 
 export const HomeScreen: React.FC = () => {
+  const {t} = useTranslation();
   const {userProfile, authUser, refreshProfile} = useAuth();
   const {checkIn: rawCheckIn, loading, error} = useCheckIn({
     userId: authUser?.id,
@@ -49,30 +51,30 @@ export const HomeScreen: React.FC = () => {
 
   const getStatusInfo = () => {
     if (!userProfile) {
-      return {status: 'Loading...', color: '#6B7280'};
+      return {status: t('common.loading'), color: '#6B7280'};
     }
 
     switch (userProfile.alert_status) {
       case 'ok':
         return {
-          status: 'All Good',
-          description: 'Your contacts will be notified if you miss a check-in',
+          status: t('home.allGood'),
+          description: t('home.allGoodDesc'),
           color: '#22C55E',
         };
       case 'warning_sent':
         return {
-          status: 'Warning Sent',
-          description: 'Please check in soon to let your contacts know you are safe',
+          status: t('home.warningSent'),
+          description: t('home.warningSentDesc'),
           color: '#F59E0B',
         };
       case 'alert_sent':
         return {
-          status: 'Alert Sent',
-          description: 'Your contacts have been notified. Check in to reset.',
+          status: t('home.alertSent'),
+          description: t('home.alertSentDesc'),
           color: '#EF4444',
         };
       default:
-        return {status: 'Unknown', color: '#6B7280'};
+        return {status: t('home.unknown'), color: '#6B7280'};
     }
   };
 
@@ -81,9 +83,9 @@ export const HomeScreen: React.FC = () => {
   const formatDuration = (hours: number) => {
     if (hours < 1) {
       const mins = Math.round(hours * 60);
-      return `${mins} minutes`;
+      return t('time.minutes', {count: mins});
     }
-    return `${hours} hour${hours === 1 ? '' : 's'}`;
+    return t('time.hours', {count: hours});
   };
 
   const getTimeSinceLastCheckIn = () => {
@@ -98,9 +100,9 @@ export const HomeScreen: React.FC = () => {
     const diffMins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
 
     if (diffHours > 0) {
-      return `${diffHours}h ${diffMins}m ago`;
+      return t('home.hoursAgo', {hours: diffHours, mins: diffMins});
     }
-    return `${diffMins}m ago`;
+    return t('home.minutesAgo', {mins: diffMins});
   };
 
   return (
@@ -108,7 +110,7 @@ export const HomeScreen: React.FC = () => {
       <View style={styles.content}>
         <View style={styles.header}>
           <Text style={styles.greeting}>
-            Hello, {userProfile?.full_name?.split(' ')[0] || 'there'}
+            {t('home.hello', {name: userProfile?.full_name?.split(' ')[0] || t('home.defaultName')})}
           </Text>
           <View style={[styles.statusBadge, {backgroundColor: statusInfo.color}]}>
             <Text style={styles.statusText}>{statusInfo.status}</Text>
@@ -133,31 +135,31 @@ export const HomeScreen: React.FC = () => {
         )}
 
         <View style={styles.infoCard}>
-          <Text style={styles.infoTitle}>Monitoring Settings</Text>
+          <Text style={styles.infoTitle}>{t('home.monitoringSettings')}</Text>
           <View style={styles.infoRow}>
-            <Text style={styles.infoLabel}>Alert after</Text>
+            <Text style={styles.infoLabel}>{t('home.alertAfter')}</Text>
             <Text style={styles.infoValue}>
-              {formatDuration(userProfile?.inactivity_threshold_hours || 24)} of inactivity
+              {t('home.ofInactivity', {duration: formatDuration(userProfile?.inactivity_threshold_hours || 24)})}
             </Text>
           </View>
           <View style={styles.infoRow}>
-            <Text style={styles.infoLabel}>Grace period</Text>
+            <Text style={styles.infoLabel}>{t('home.gracePeriod')}</Text>
             <Text style={styles.infoValue}>
               {formatDuration(userProfile?.grace_period_hours || 2)}
             </Text>
           </View>
           <View style={styles.infoRow}>
-            <Text style={styles.infoLabel}>Quiet hours</Text>
+            <Text style={styles.infoLabel}>{t('home.quietHours')}</Text>
             <Text style={styles.infoValue}>
               {userProfile?.sleep_start_time && userProfile?.sleep_end_time
                 ? `${userProfile.sleep_start_time.slice(0, 5)} – ${userProfile.sleep_end_time.slice(0, 5)}`
-                : 'Not set'}
+                : t('home.notSet')}
             </Text>
           </View>
           <View style={styles.infoRow}>
-            <Text style={styles.infoLabel}>Status</Text>
+            <Text style={styles.infoLabel}>{t('home.status')}</Text>
             <Text style={[styles.infoValue, {color: userProfile?.monitoring_enabled ? '#22C55E' : '#EF4444'}]}>
-              {userProfile?.monitoring_enabled ? 'Active' : 'Paused'}
+              {userProfile?.monitoring_enabled ? t('home.active') : t('home.paused')}
             </Text>
           </View>
         </View>

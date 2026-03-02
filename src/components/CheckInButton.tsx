@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   View,
 } from 'react-native';
+import {useTranslation} from 'react-i18next';
 
 interface CheckInButtonProps {
   onPress: () => void;
@@ -20,6 +21,8 @@ export const CheckInButton: React.FC<CheckInButtonProps> = ({
   disabled = false,
   lastCheckInTime,
 }) => {
+  const {t} = useTranslation();
+
   const formatLastCheckIn = (isoString: string) => {
     const date = new Date(isoString);
     const now = new Date();
@@ -29,15 +32,15 @@ export const CheckInButton: React.FC<CheckInButtonProps> = ({
     const diffDays = Math.floor(diffHours / 24);
 
     if (diffMins < 1) {
-      return 'Just now';
+      return t('checkIn.justNow');
     }
     if (diffMins < 60) {
-      return `${diffMins} minute${diffMins === 1 ? '' : 's'} ago`;
+      return t('checkIn.minutesAgo', {count: diffMins});
     }
     if (diffHours < 24) {
-      return `${diffHours} hour${diffHours === 1 ? '' : 's'} ago`;
+      return t('checkIn.hoursAgo', {count: diffHours});
     }
-    return `${diffDays} day${diffDays === 1 ? '' : 's'} ago`;
+    return t('checkIn.daysAgo', {count: diffDays});
   };
 
   return (
@@ -55,15 +58,15 @@ export const CheckInButton: React.FC<CheckInButtonProps> = ({
           <ActivityIndicator size="large" color="#FFFFFF" />
         ) : (
           <>
-            <Text style={styles.buttonText}>I'm OK</Text>
-            <Text style={styles.buttonSubtext}>Tap to check in</Text>
+            <Text style={styles.buttonText}>{t('checkIn.imOk')}</Text>
+            <Text style={styles.buttonSubtext}>{t('checkIn.tapToCheckIn')}</Text>
           </>
         )}
       </TouchableOpacity>
 
       {lastCheckInTime && (
         <Text style={styles.lastCheckIn}>
-          Last check-in: {formatLastCheckIn(lastCheckInTime)}
+          {t('checkIn.lastCheckIn', {time: formatLastCheckIn(lastCheckInTime)})}
         </Text>
       )}
     </View>

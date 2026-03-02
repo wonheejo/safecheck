@@ -13,6 +13,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
+import {useTranslation} from 'react-i18next';
 import {useAuth} from '../../hooks/useAuth';
 import {useContacts} from '../../hooks/useContacts';
 import {ContactForm} from '../../components';
@@ -20,6 +21,7 @@ import type {TrustedContact, CountryCode} from '../../types';
 import {COUNTRIES} from '../../types';
 
 export const ContactsScreen: React.FC = () => {
+  const {t} = useTranslation();
   const {authUser} = useAuth();
   const {
     contacts,
@@ -47,17 +49,17 @@ export const ContactsScreen: React.FC = () => {
 
   const handleDeleteContact = (contact: TrustedContact) => {
     Alert.alert(
-      'Remove Contact',
-      `Are you sure you want to remove ${contact.name} from your trusted contacts?`,
+      t('contacts.removeContact'),
+      t('contacts.removeContactConfirm', {name: contact.name}),
       [
-        {text: 'Cancel', style: 'cancel'},
+        {text: t('common.cancel'), style: 'cancel'},
         {
-          text: 'Remove',
+          text: t('common.remove'),
           style: 'destructive',
           onPress: async () => {
             const result = await removeContact(contact.id);
             if (result.error) {
-              Alert.alert('Error', result.error);
+              Alert.alert(t('common.error'), result.error);
             }
           },
         },
@@ -80,13 +82,13 @@ export const ContactsScreen: React.FC = () => {
           country_code: countryCode,
         });
         if (result.error) {
-          Alert.alert('Error', result.error);
+          Alert.alert(t('common.error'), result.error);
           return;
         }
       } else {
         const result = await addContact(name, phoneNumber, countryCode);
         if (result.error) {
-          Alert.alert('Error', result.error);
+          Alert.alert(t('common.error'), result.error);
           return;
         }
       }
@@ -126,12 +128,12 @@ export const ContactsScreen: React.FC = () => {
           <TouchableOpacity
             style={styles.actionButton}
             onPress={() => handleEditContact(item)}>
-            <Text style={styles.actionButtonText}>Edit</Text>
+            <Text style={styles.actionButtonText}>{t('common.edit')}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.actionButton, styles.deleteButton]}
             onPress={() => handleDeleteContact(item)}>
-            <Text style={styles.deleteButtonText}>Remove</Text>
+            <Text style={styles.deleteButtonText}>{t('common.remove')}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -140,10 +142,9 @@ export const ContactsScreen: React.FC = () => {
 
   const renderEmptyState = () => (
     <View style={styles.emptyState}>
-      <Text style={styles.emptyTitle}>No Trusted Contacts</Text>
+      <Text style={styles.emptyTitle}>{t('contacts.noContacts')}</Text>
       <Text style={styles.emptyDescription}>
-        Add up to {maxContacts} trusted contacts who will be notified if you
-        don't check in.
+        {t('contacts.noContactsDesc', {max: maxContacts})}
       </Text>
     </View>
   );
@@ -152,9 +153,9 @@ export const ContactsScreen: React.FC = () => {
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
         <View style={styles.header}>
-          <Text style={styles.title}>Trusted Contacts</Text>
+          <Text style={styles.title}>{t('contacts.title')}</Text>
           <Text style={styles.subtitle}>
-            {contacts.length}/{maxContacts} contacts
+            {t('contacts.contactCount', {count: contacts.length, max: maxContacts})}
           </Text>
         </View>
 
@@ -169,7 +170,7 @@ export const ContactsScreen: React.FC = () => {
 
         {canAddMore && (
           <TouchableOpacity style={styles.addButton} onPress={handleAddContact}>
-            <Text style={styles.addButtonText}>+ Add Contact</Text>
+            <Text style={styles.addButtonText}>{t('contacts.addContact')}</Text>
           </TouchableOpacity>
         )}
       </View>

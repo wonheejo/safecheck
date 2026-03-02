@@ -8,22 +8,24 @@ import {
   SafeAreaView,
   Alert,
 } from 'react-native';
+import {useTranslation} from 'react-i18next';
 import {supabase} from '../../api/supabase';
 
 export const ResetPasswordScreen: React.FC<{onComplete: () => void}> = ({
   onComplete,
 }) => {
+  const {t} = useTranslation();
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleReset = async () => {
     if (password.length < 6) {
-      Alert.alert('Error', 'Password must be at least 6 characters');
+      Alert.alert(t('common.error'), t('resetPassword.passwordMinLength'));
       return;
     }
     if (password !== confirmPassword) {
-      Alert.alert('Error', 'Passwords do not match');
+      Alert.alert(t('common.error'), t('resetPassword.passwordsDoNotMatch'));
       return;
     }
 
@@ -31,10 +33,10 @@ export const ResetPasswordScreen: React.FC<{onComplete: () => void}> = ({
     try {
       const {error} = await supabase.auth.updateUser({password});
       if (error) {
-        Alert.alert('Error', error.message);
+        Alert.alert(t('common.error'), error.message);
       } else {
-        Alert.alert('Success', 'Your password has been updated.', [
-          {text: 'OK', onPress: onComplete},
+        Alert.alert(t('resetPassword.success'), t('resetPassword.passwordUpdated'), [
+          {text: t('common.ok'), onPress: onComplete},
         ]);
       }
     } finally {
@@ -45,30 +47,30 @@ export const ResetPasswordScreen: React.FC<{onComplete: () => void}> = ({
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.title}>Set New Password</Text>
+        <Text style={styles.title}>{t('resetPassword.title')}</Text>
         <Text style={styles.subtitle}>
-          Enter your new password below.
+          {t('resetPassword.subtitle')}
         </Text>
 
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>New Password</Text>
+          <Text style={styles.label}>{t('resetPassword.newPassword')}</Text>
           <TextInput
             style={styles.input}
             value={password}
             onChangeText={setPassword}
-            placeholder="At least 6 characters"
+            placeholder={t('resetPassword.newPasswordPlaceholder')}
             placeholderTextColor="#9CA3AF"
             secureTextEntry
           />
         </View>
 
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>Confirm Password</Text>
+          <Text style={styles.label}>{t('resetPassword.confirmPassword')}</Text>
           <TextInput
             style={styles.input}
             value={confirmPassword}
             onChangeText={setConfirmPassword}
-            placeholder="Re-enter your password"
+            placeholder={t('resetPassword.confirmPasswordPlaceholder')}
             placeholderTextColor="#9CA3AF"
             secureTextEntry
           />
@@ -79,7 +81,7 @@ export const ResetPasswordScreen: React.FC<{onComplete: () => void}> = ({
           onPress={handleReset}
           disabled={loading}>
           <Text style={styles.buttonText}>
-            {loading ? 'Updating...' : 'Update Password'}
+            {loading ? t('resetPassword.updating') : t('resetPassword.updatePassword')}
           </Text>
         </TouchableOpacity>
       </View>

@@ -8,6 +8,7 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
+import {useTranslation} from 'react-i18next';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {OnboardingStackParamList} from '../../navigation/types';
 import {useAuth} from '../../hooks/useAuth';
@@ -22,6 +23,7 @@ type SetThresholdScreenProps = {
 export const SetThresholdScreen: React.FC<SetThresholdScreenProps> = ({
   navigation,
 }) => {
+  const {t} = useTranslation();
   const {authUser, userProfile, refreshProfile} = useAuth();
 
   const [inactivityThreshold, setInactivityThreshold] = useState(
@@ -50,7 +52,7 @@ export const SetThresholdScreen: React.FC<SetThresholdScreenProps> = ({
       });
 
       if (error) {
-        Alert.alert('Error', 'Failed to save settings. Please try again.');
+        Alert.alert(t('common.error'), t('onboarding.failedToSave'));
         return;
       }
 
@@ -68,60 +70,60 @@ export const SetThresholdScreen: React.FC<SetThresholdScreenProps> = ({
           <TouchableOpacity
             style={styles.backButton}
             onPress={() => navigation.goBack()}>
-            <Text style={styles.backButtonText}>{'<'} Back</Text>
+            <Text style={styles.backButtonText}>{t('common.back')}</Text>
           </TouchableOpacity>
-          <Text style={styles.step}>Step 2 of 3</Text>
-          <Text style={styles.title}>Configure Alerts</Text>
+          <Text style={styles.step}>{t('onboarding.step2of3')}</Text>
+          <Text style={styles.title}>{t('onboarding.configureAlerts')}</Text>
           <Text style={styles.subtitle}>
-            Set how long you can be inactive before your contacts are alerted.
+            {t('onboarding.configureAlertsDesc')}
           </Text>
         </View>
 
         <View style={styles.content}>
           <ThresholdPicker
-            label="Inactivity Threshold"
-            description="If you don't check in within this time, we'll send you a warning"
+            label={t('onboarding.inactivityThreshold')}
+            description={t('onboarding.inactivityThresholdDesc')}
             options={INACTIVITY_THRESHOLDS}
             selectedValue={inactivityThreshold}
             onSelect={setInactivityThreshold}
           />
 
           <ThresholdPicker
-            label="Grace Period"
-            description="Time to respond after receiving a warning before contacts are alerted"
+            label={t('onboarding.gracePeriod')}
+            description={t('onboarding.gracePeriodDesc')}
             options={GRACE_PERIODS}
             selectedValue={gracePeriod}
             onSelect={setGracePeriod}
           />
 
           <ThresholdPicker
-            label="Reminder Frequency"
-            description="How often we'll remind you to check in (via push notification)"
+            label={t('onboarding.reminderFrequency')}
+            description={t('onboarding.reminderFrequencyDesc')}
             options={REMINDER_FREQUENCIES}
             selectedValue={reminderFrequency}
             onSelect={setReminderFrequency}
           />
 
           <View style={styles.summaryCard}>
-            <Text style={styles.summaryTitle}>Your Alert Flow</Text>
+            <Text style={styles.summaryTitle}>{t('onboarding.alertFlow')}</Text>
             <View style={styles.flowStep}>
               <View style={styles.flowDot} />
               <Text style={styles.flowText}>
-                You'll receive reminders every {reminderFrequency} hours
+                {t('onboarding.alertFlowReminder', {hours: reminderFrequency})}
               </Text>
             </View>
             <View style={styles.flowLine} />
             <View style={styles.flowStep}>
               <View style={[styles.flowDot, {backgroundColor: '#F59E0B'}]} />
               <Text style={styles.flowText}>
-                After {inactivityThreshold} hours of no check-in, you'll get a warning
+                {t('onboarding.alertFlowWarning', {hours: inactivityThreshold})}
               </Text>
             </View>
             <View style={styles.flowLine} />
             <View style={styles.flowStep}>
               <View style={[styles.flowDot, {backgroundColor: '#EF4444'}]} />
               <Text style={styles.flowText}>
-                If no response within {gracePeriod} hours, your contacts receive SMS
+                {t('onboarding.alertFlowSms', {hours: gracePeriod})}
               </Text>
             </View>
           </View>
@@ -132,7 +134,7 @@ export const SetThresholdScreen: React.FC<SetThresholdScreenProps> = ({
           onPress={handleContinue}
           disabled={saving}>
           <Text style={styles.continueButtonText}>
-            {saving ? 'Saving...' : 'Continue'}
+            {saving ? t('common.saving') : t('common.continue')}
           </Text>
         </TouchableOpacity>
       </ScrollView>
