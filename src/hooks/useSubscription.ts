@@ -61,7 +61,11 @@ export const useSubscription = () => {
       await loadCachedStatus();
 
       try {
-        await initConnection();
+        // Timeout IAP init to prevent infinite loading (e.g. in simulator)
+        const connectionTimeout = new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error('IAP connection timeout')), 10000),
+        );
+        await Promise.race([initConnection(), connectionTimeout]);
 
         // Fetch subscription product to confirm it exists
         const skus = Platform.select({

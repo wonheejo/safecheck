@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   SafeAreaView,
+  ScrollView,
   Alert,
   Linking,
   ActivityIndicator,
@@ -47,7 +48,10 @@ export const PaywallScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        bounces={false}
+        showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
           <View style={styles.logoContainer}>
             <Text style={styles.logo}>JIC</Text>
@@ -93,6 +97,32 @@ export const PaywallScreen: React.FC = () => {
         <View style={styles.bottom}>
           <Text style={styles.price}>{t('paywall.price')}</Text>
 
+          <Text style={styles.terms}>
+            {t('paywall.subscriptionTerms')}
+          </Text>
+
+          <View style={styles.links}>
+            <TouchableOpacity
+              style={styles.linkButton}
+              onPress={() =>
+                Linking.openURL(
+                  'https://wonheejo.github.io/safecheck/terms-of-service.html',
+                )
+              }>
+              <Text style={styles.linkText}>{t('paywall.termsOfService')}</Text>
+            </TouchableOpacity>
+            <Text style={styles.linkSeparator}>|</Text>
+            <TouchableOpacity
+              style={styles.linkButton}
+              onPress={() =>
+                Linking.openURL(
+                  'https://wonheejo.github.io/safecheck/privacy-policy.html',
+                )
+              }>
+              <Text style={styles.linkText}>{t('paywall.privacyPolicy')}</Text>
+            </TouchableOpacity>
+          </View>
+
           <TouchableOpacity
             style={[styles.subscribeButton, (purchasing || isLoading) && styles.buttonDisabled]}
             onPress={handlePurchase}
@@ -112,32 +142,8 @@ export const PaywallScreen: React.FC = () => {
               {restoring ? t('paywall.restoring') : t('paywall.restorePurchase')}
             </Text>
           </TouchableOpacity>
-
-          <Text style={styles.terms}>
-            {t('paywall.subscriptionTerms')}
-          </Text>
-
-          <View style={styles.links}>
-            <TouchableOpacity
-              onPress={() =>
-                Linking.openURL(
-                  'https://wonheejo.github.io/safecheck/terms-of-service.html',
-                )
-              }>
-              <Text style={styles.linkText}>{t('paywall.termsOfService')}</Text>
-            </TouchableOpacity>
-            <Text style={styles.linkSeparator}>|</Text>
-            <TouchableOpacity
-              onPress={() =>
-                Linking.openURL(
-                  'https://wonheejo.github.io/safecheck/privacy-policy.html',
-                )
-              }>
-              <Text style={styles.linkText}>{t('paywall.privacyPolicy')}</Text>
-            </TouchableOpacity>
-          </View>
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -147,8 +153,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
   },
-  content: {
-    flex: 1,
+  scrollContent: {
+    flexGrow: 1,
     paddingHorizontal: 24,
     justifyContent: 'space-between',
     paddingTop: 40,
@@ -250,23 +256,30 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   terms: {
-    fontSize: 11,
-    color: '#9CA3AF',
+    fontSize: 12,
+    color: '#6B7280',
     textAlign: 'center',
-    lineHeight: 16,
-    marginBottom: 12,
+    lineHeight: 18,
+    marginBottom: 16,
   },
   links: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: 8,
+    marginBottom: 20,
+  },
+  linkButton: {
+    paddingVertical: 4,
+    paddingHorizontal: 2,
   },
   linkText: {
-    fontSize: 12,
+    fontSize: 14,
     color: '#3B82F6',
+    textDecorationLine: 'underline',
   },
   linkSeparator: {
-    fontSize: 12,
+    fontSize: 14,
     color: '#D1D5DB',
   },
 });

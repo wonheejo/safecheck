@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {ActivityIndicator, View, StyleSheet} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -18,6 +18,16 @@ const SUBSCRIPTION_CUTOFF_DATE = '2026-02-28T00:00:00Z';
 export const RootNavigator: React.FC = () => {
   const {isAuthenticated, initialized, userProfile, loading} = useAuth();
   const {isSubscribed, isLoading: subscriptionLoading} = useSubscription();
+  const [subscriptionTimedOut, setSubscriptionTimedOut] = useState(false);
+
+  // Timeout for subscription loading so we never block indefinitely
+  useEffect(() => {
+    if (!subscriptionLoading) {
+      return;
+    }
+    const timer = setTimeout(() => setSubscriptionTimedOut(true), 8000);
+    return () => clearTimeout(timer);
+  }, [subscriptionLoading]);
 
   if (!initialized) {
     return (
@@ -27,8 +37,8 @@ export const RootNavigator: React.FC = () => {
     );
   }
 
-  // Show loading while checking subscription for authenticated users
-  if (isAuthenticated && subscriptionLoading) {
+  // Show loading while checking subscription, but not forever
+  if (isAuthenticated && subscriptionLoading && !subscriptionTimedOut) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#3B82F6" />
